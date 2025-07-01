@@ -632,7 +632,6 @@
 
                             // Check if the response contains claims
                             if (response.claims) {
-
                                 // Show the claims
                                 $('#presentationClaimsContainer').show();
                                 $('#presentationClaims').empty();
@@ -650,22 +649,23 @@
                                         $('#presentationClaims').append(`<li>${key}: ${value}</li>`);
                                     }
                                 });
-
-                                break;
                             }
-
-
-                            updateProgress(type, progress, message);
-
-                            // Stop checking if completed
-                            if (progress >= 100 || response.status === 'completed') {
-                                clearStatusCheck();
-                            }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Status check error:', error);
+                            
+                            break;
                     }
-                });
+
+
+                    updateProgress(type, progress, message);
+
+                    // Stop checking if completed
+                    if (progress >= 100 || response.status === 'completed') {
+                        clearStatusCheck();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Status check error:', error);
+                }
+            });
         }
 
         // Update progress circle
