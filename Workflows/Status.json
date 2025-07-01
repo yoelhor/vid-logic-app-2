@@ -1,0 +1,57 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Response": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@body('Get_state_entity')"
+                },
+                "runAfter": {
+                    "Get_state_entity": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Get_state_entity": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('StorageAccountName')))}/tables/@{encodeURIComponent('VerifiedIdState')}/entities(PartitionKey='@{encodeURIComponent('key')}',RowKey='@{encodeURIComponent(triggerBody()?['state'])}')"
+                },
+                "runAfter": {}
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "api": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "type": "object",
+                        "required": [
+                            "state"
+                        ],
+                        "properties": {
+                            "state": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "operationOptions": "EnableSchemaValidation"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

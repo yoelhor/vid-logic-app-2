@@ -206,7 +206,8 @@
                                 </form>
 
                                 <!-- Error message for issuance -->
-                                <div id="issuanceErrorContainer" class="alert alert-danger" style="display: none;" role="alert">
+                                <div id="issuanceErrorContainer" class="alert alert-danger" style="display: none;"
+                                    role="alert">
                                     <i class="bi bi-exclamation-triangle"></i>
                                     <span id="issuanceError"></span>
                                 </div>
@@ -268,6 +269,13 @@
                                     </button>
                                 </div>
 
+                                <!-- Claims container for presentation -->
+                                <div id="presentationClaimsContainer" class="mt-4" style="display: none;">
+                                    <h4>Your Claims</h4>
+                                    <ul id="presentationClaims" class="list-unstyled">
+
+                                    </ul>
+                                </div>
 
                                 <!-- Error message for presentation -->
                                 <div id="presentationErrorContainer" class="alert alert-danger" style="display: none;"
@@ -482,7 +490,7 @@
 
             // Hide any previous errors
             $('#presentationErrorContainer').hide();
-            
+
             // Hide the prompt container
             $('#presentationPromptContainer').hide();
 
@@ -507,7 +515,7 @@
                     // Render the QR code
                     $('#presentationQRContainer').show();
                     renderQRCode(response.url, 'presentationQR');
-                    
+
                     // Start checking the status
                     startStatusCheck('presentation');
                 },
@@ -586,12 +594,8 @@
                     switch (response.status) {
                         case 'request_created':
                             progress = 35;
+                            message = 'Please scan the QR code with your mobile device';
 
-                            if (type === 'issuance') {
-                                message = 'Please scan the QR code with your mobile device';
-                            } else {
-                                message = 'Waiting for request to be processed';
-                            }
                             break;
                         case 'request_retrieved':
                             progress = 60;
@@ -617,9 +621,31 @@
                             // Hide the issuance PIN code container
                             $('#issuancePinCodeContainer').hide();
 
+
                         case 'presentation_verified':
                             progress = 100;
                             message = 'Your credentials have been successfully verified.';
+
+                            // Hide the presentation QR code container
+                            $('#presentationQRContainer').hide();
+
+                            // Show the claims
+                            $('#presentationClaimsContainer').show();
+                            $('#presentationClaims').empty();
+
+                            // First take the claims string and parse it
+                            const claims = JSON.parse(response.claims);
+
+                            // This is the format of the claims, however we can't use the attributes name directly
+                            //{displayName: 'Yoel Horvitz', photo: ''}
+
+                            Object.entries(claims).forEach(([key, value]) => {
+
+                                // Hide empty values
+                                if (value) {
+                                    $('#presentationClaims').append(`<li>${key}: ${value}</li>`);
+                                }
+                            });
 
                             break;
                     }
