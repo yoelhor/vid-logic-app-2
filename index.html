@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verified ID Sample - Professional Helpdesk</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    
+
     <style>
         .navbar-brand {
             font-weight: bold;
         }
+
         .hero-section {
             min-height: 70vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
+
         .card-hover {
             transition: transform 0.2s;
         }
+
         .card-hover:hover {
             transform: translateY(-5px);
         }
+
         .progress-circle {
             width: 120px;
             height: 120px;
@@ -38,6 +42,7 @@
             justify-content: center;
             margin: 20px auto;
         }
+
         .progress-circle-inner {
             width: 90px;
             height: 90px;
@@ -49,14 +54,17 @@
             font-weight: bold;
             font-size: 1.2rem;
         }
+
         .qr-container {
             text-align: center;
             margin: 20px 0;
         }
+
         .status-section {
             display: none;
             margin-top: 20px;
         }
+
         .photo-preview {
             max-width: 200px;
             max-height: 200px;
@@ -64,18 +72,19 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#" onclick="showHomePage()">
                 <i class="bi bi-shield-check"></i> Verified ID Sample
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -89,7 +98,7 @@
                         </a>
                     </li>
                 </ul>
-                
+
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="https://github.com/yoelhor/vid-logic-app-2" target="_blank">
@@ -114,10 +123,10 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="text-center mb-5">
-                            <h1 class="display-4 mb-3">Professional Identity Management</h1>
-                            <p class="lead text-muted">Secure credential issuance and verification platform</p>
+                            <h1 class="display-5 mb-3">Your Gateway to Verified ID Credentials</h1>
+                            <p class="lead text-muted">Secure credential issuance and verification sample application</p>
                         </div>
-                        
+
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <div class="card h-100 shadow-sm card-hover" onclick="renderIssuanceUI()">
@@ -126,21 +135,23 @@
                                             <i class="bi bi-plus-circle text-primary" style="font-size: 3rem;"></i>
                                         </div>
                                         <h3 class="card-title">Obtain Credential</h3>
-                                        <p class="card-text text-muted">Request and receive your verified digital identity credential</p>
+                                        <p class="card-text text-muted">Request and receive your Verified ID digital
+                                             credential</p>
                                         <button class="btn btn-primary btn-lg">Get Started</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="card h-100 shadow-sm card-hover" onclick="renderPresentationUI()">
                                     <div class="card-body text-center p-5">
                                         <div class="mb-3">
-                                            <i class="bi bi-card-checklist text-success" style="font-size: 3rem;"></i>
+                                            <i class="bi bi-card-checklist text-primary" style="font-size: 3rem;"></i>
                                         </div>
-                                        <h3 class="card-title">Present Credentials</h3>
-                                        <p class="card-text text-muted">Share your verified credentials securely with authorized parties</p>
-                                        <button class="btn btn-success btn-lg">Present Now</button>
+                                        <h3 class="card-title">Present Credential</h3>
+                                        <p class="card-text text-muted">Share your verified credentials securely with
+                                            us</p>
+                                        <button class="btn btn-primary btn-lg">Present Now</button>
                                     </div>
                                 </div>
                             </div>
@@ -151,42 +162,49 @@
         </div>
 
         <!-- Issuance UI -->
-        <div id="issuanceUI" class="container py-5" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h2 class="mb-0">
-                                <i class="bi bi-plus-circle"></i> Obtain New Credential
-                            </h2>
-                        </div>
-                        <div class="card-body">
-                            <form id="issuanceForm">
-                                <div class="mb-3">
-                                    <label for="displayName" class="form-label">Display Name</label>
-                                    <input type="text" class="form-control" id="displayName" required>
+        <div id="issuanceUI" class="hero-section" style="display: none;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="mb-0">
+                                        <i class="bi bi-plus-circle"></i> Obtain New Credential
+                                    </h2>
+                                    <button type="button" class="btn btn-primary" onclick="showHomePage()">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
                                 </div>
-                                
-                                <div class="mb-3">
-                                    <label for="photoUpload" class="form-label">Upload Photo</label>
-                                    <input type="file" class="form-control" id="photoUpload" accept="image/*">
-                                    <div id="photoPreview"></div>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-send"></i> Submit Request
-                                </button>
-                            </form>
-                            
-                            <div id="issuanceStatus" class="status-section">
-                                <hr>
-                                <div class="text-center">
-                                    <h4>Scan QR Code with your mobile device</h4>
-                                    <div id="issuanceQR" class="qr-container"></div>
-                                    <div class="progress-circle" id="issuanceProgress">
-                                        <div class="progress-circle-inner">0%</div>
+                            </div>
+                            <div class="card-body">
+                                <form id="issuanceForm">
+                                    <div class="mb-3">
+                                        <label for="displayName" class="form-label">Display Name</label>
+                                        <input type="text" class="form-control" id="displayName" required>
                                     </div>
-                                    <p id="issuanceStatusText" class="text-muted">Waiting for response...</p>
+
+                                    <div class="mb-3">
+                                        <label for="photoUpload" class="form-label">Upload Photo</label>
+                                        <input type="file" class="form-control" id="photoUpload" accept="image/*">
+                                        <div id="photoPreview"></div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-send"></i> Submit Request
+                                    </button>
+                                </form>
+
+                                <div id="issuanceStatus" class="status-section">
+                                    <hr>
+                                    <div class="text-center">
+                                        <h4>Scan QR Code with your mobile device</h4>
+                                        <div id="issuanceQR" class="qr-container"></div>
+                                        <div class="progress-circle" id="issuanceProgress">
+                                            <div class="progress-circle-inner">0%</div>
+                                        </div>
+                                        <p id="issuanceStatusText" class="text-muted">Waiting for response...</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -196,32 +214,39 @@
         </div>
 
         <!-- Presentation UI -->
-        <div id="presentationUI" class="container py-5" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card shadow">
-                        <div class="card-header bg-success text-white">
-                            <h2 class="mb-0">
-                                <i class="bi bi-card-checklist"></i> Present Your Credentials
-                            </h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="text-center">
-                                <p class="lead">Ready to share your verified credentials?</p>
-                                <button class="btn btn-success btn-lg" onclick="StartPresentationFlow()">
-                                    <i class="bi bi-share"></i> Start Presentation
-                                </button>
+        <div id="presentationUI" class="hero-section" style="display: none;">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="mb-0">
+                                        <i class="bi bi-card-checklist"></i> Present Your Credential
+                                    </h2>
+                                    <button type="button" class="btn btn-primary" onclick="showHomePage()">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
                             </div>
-                            
-                            <div id="presentationStatus" class="status-section">
-                                <hr>
+                            <div class="card-body">
                                 <div class="text-center">
-                                    <h4>Scan QR Code with your mobile device</h4>
-                                    <div id="presentationQR" class="qr-container"></div>
-                                    <div class="progress-circle" id="presentationProgress">
-                                        <div class="progress-circle-inner">0%</div>
+                                    <p class="lead">Ready to share your verified credentials?</p>
+                                    <button class="btn btn-primary btn-lg" onclick="StartPresentationFlow()">
+                                        <i class="bi bi-share"></i> Start Presentation
+                                    </button>
+                                </div>
+
+                                <div id="presentationStatus" class="status-section">
+                                    <hr>
+                                    <div class="text-center">
+                                        <h4>Scan QR Code with your mobile device</h4>
+                                        <div id="presentationQR" class="qr-container"></div>
+                                        <div class="progress-circle" id="presentationProgress">
+                                            <div class="progress-circle-inner">0%</div>
+                                        </div>
+                                        <p id="presentationStatusText" class="text-muted">Waiting for response...</p>
                                     </div>
-                                    <p id="presentationStatusText" class="text-muted">Waiting for response...</p>
                                 </div>
                             </div>
                         </div>
@@ -270,11 +295,11 @@
         }
 
         // Photo preview functionality
-        $('#photoUpload').on('change', function(e) {
+        $('#photoUpload').on('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $('#photoPreview').html(`
                         <img src="${e.target.result}" class="photo-preview img-thumbnail" alt="Photo preview">
                     `);
@@ -284,7 +309,7 @@
         });
 
         // Issuance form submission
-        $('#issuanceForm').on('submit', function(e) {
+        $('#issuanceForm').on('submit', function (e) {
             e.preventDefault();
             StartIssuanceFlow();
         });
@@ -293,7 +318,7 @@
         function StartIssuanceFlow() {
             const displayName = $('#displayName').val();
             const photoFile = $('#photoUpload')[0].files[0];
-            
+
             if (!displayName.trim()) {
                 alert('Please enter a display name');
                 return;
@@ -311,13 +336,13 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: function (response) {
                     $('#currentState').val(response.state);
                     generateQRCode(response.url, 'issuanceQR');
                     $('#issuanceStatus').show();
                     startStatusCheck('issuance');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     alert('Error starting issuance flow: ' + error);
                 }
             });
@@ -330,13 +355,13 @@
                 type: 'POST',
                 data: JSON.stringify({}),
                 contentType: 'application/json',
-                success: function(response) {
+                success: function (response) {
                     $('#currentState').val(response.state);
                     generateQRCode(response.url, 'presentationQR');
                     $('#presentationStatus').show();
                     startStatusCheck('presentation');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     alert('Error starting presentation flow: ' + error);
                 }
             });
@@ -346,12 +371,12 @@
         function generateQRCode(url, containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-            
+
             QRCode.toCanvas(container, url, {
                 width: 256,
                 height: 256,
                 margin: 2
-            }, function(error) {
+            }, function (error) {
                 if (error) {
                     console.error('QR Code generation error:', error);
                     container.innerHTML = '<p class="text-danger">Error generating QR code</p>';
@@ -362,8 +387,8 @@
         // Start status checking
         function startStatusCheck(type) {
             clearStatusCheck();
-            
-            statusCheckInterval = setInterval(function() {
+
+            statusCheckInterval = setInterval(function () {
                 CheckStatus(type);
             }, 2000); // Check every 2 seconds
         }
@@ -371,7 +396,7 @@
         // Check Status
         function CheckStatus(type) {
             const state = $('#currentState').val();
-            
+
             if (!state) {
                 return;
             }
@@ -381,16 +406,16 @@
                 type: 'POST',
                 data: JSON.stringify({ state: state }),
                 contentType: 'application/json',
-                success: function(response) {
+                success: function (response) {
                     updateProgress(type, response.progress || 0);
                     updateStatusText(type, response.status || 'Processing...');
-                    
+
                     // Stop checking if completed
                     if (response.progress >= 100 || response.status === 'completed') {
                         clearStatusCheck();
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Status check error:', error);
                     updateStatusText(type, 'Error checking status');
                 }
@@ -401,13 +426,13 @@
         function updateProgress(type, progress) {
             const progressElement = $(`#${type}Progress`);
             const innerElement = progressElement.find('.progress-circle-inner');
-            
+
             // Update text
             innerElement.text(Math.round(progress) + '%');
-            
+
             // Update circle progress
             const degrees = (progress / 100) * 360;
-            progressElement.css('background', 
+            progressElement.css('background',
                 `conic-gradient(#198754 ${degrees}deg, #e9ecef ${degrees}deg)`
             );
         }
@@ -426,9 +451,10 @@
         }
 
         // Initialize the application
-        $(document).ready(function() {
+        $(document).ready(function () {
             showHomePage();
         });
     </script>
 </body>
+
 </html>
