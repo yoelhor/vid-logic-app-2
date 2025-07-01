@@ -630,39 +630,42 @@
                             // Hide the presentation QR code container
                             $('#presentationQRContainer').hide();
 
-                            // Show the claims
-                            $('#presentationClaimsContainer').show();
-                            $('#presentationClaims').empty();
+                            // Check if the response contains claims
+                            if (response.claims) {
 
-                            // First take the claims string and parse it
-                            const claims = JSON.parse(response.claims);
+                                // Show the claims
+                                $('#presentationClaimsContainer').show();
+                                $('#presentationClaims').empty();
 
-                            // This is the format of the claims, however we can't use the attributes name directly
-                            //{displayName: 'Yoel Horvitz', photo: ''}
+                                // First take the claims string and parse it
+                                const claims = JSON.parse(response.claims);
 
-                            Object.entries(claims).forEach(([key, value]) => {
+                                // This is the format of the claims, however we can't use the attributes name directly
+                                //{displayName: 'Yoel Horvitz', photo: ''}
 
-                                // Hide empty values
-                                if (value) {
-                                    $('#presentationClaims').append(`<li>${key}: ${value}</li>`);
-                                }
-                            });
+                                Object.entries(claims).forEach(([key, value]) => {
 
-                            break;
+                                    // Hide empty values
+                                    if (value) {
+                                        $('#presentationClaims').append(`<li>${key}: ${value}</li>`);
+                                    }
+                                });
+
+                                break;
+                            }
+
+
+                            updateProgress(type, progress, message);
+
+                            // Stop checking if completed
+                            if (progress >= 100 || response.status === 'completed') {
+                                clearStatusCheck();
+                            }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Status check error:', error);
                     }
-
-
-                    updateProgress(type, progress, message);
-
-                    // Stop checking if completed
-                    if (progress >= 100 || response.status === 'completed') {
-                        clearStatusCheck();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Status check error:', error);
-                }
-            });
+                });
         }
 
         // Update progress circle
