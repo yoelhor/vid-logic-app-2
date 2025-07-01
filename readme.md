@@ -1,0 +1,15 @@
+This is a single page application (index.html) named "Verified ID sample". Design the app to look like a professional helpdesk application, simple gray scale colors based on Bootstrap. The bottoms and other UI elements should have the Bootstrap default colors. For the JavaScript framework, use jQuery. Add an header and in the header add links "obtain" credential and "preset" credentials. Also add links to the GitHub repo at https://github.com/yoelhor/vid-logic-app-2 (with GitHub icon), link to privacy at https://github.com/yoelhor/vid-logic-app-2/privacy (with icon).
+
+In the index.html file at the center of the page, a user should have two options, to obtain a credential and present their credentials. When a user clicks on the obtain or present buttons from the header or from the center of the page, it should call a respective JavaScript function rendertIssuanceUI and renderPresentationUI. 
+
+Both the rendertIssuanceUI and renderPresentationUI will take the user to the respective UI components. The rendertIssuanceUI will show the "issuance" UI component and the renderPresentationUI will show the "presentation" UI component.
+
+The "issuance" UI component should have a textbox for the display name, an option to upload a photo and a button to submit the request. The submit button triggers a JavaScript function named "StartIssuanceFlow". This function will invoke a web API POST request to https://localhost/issueance. The request payload contains a "display name" field and a photo. The web API responses with a URL and a unique identifier called "state". The "state" should be set to an hidden field. The returned URL should be presented with a QR code users can scan. It also should start a function called CheckStatus POST request to https://localhost/status the JSON payload contains value of the "state" field. The status web API returns the users status that should be presented to the user. Add a circle that present the status of the flow, starting from 0 to 100%.
+
+
+The "presentation" UI component should have a button to submit the request. The submit button triggers a JavaScript function named "StartPresentationFlow". This function will invoke a web API POST request to https://localhost/presentation. The request payload is empty. The web API responses with a URL and a unique identifier called "state". The "state" should be set to an hidden field. The returned URL should be presented with a QR code users can scan. It also should start a function called CheckStatus POST request to https://localhost/status the JSON payload contains value of the "state" field. The status web API returns the users status that should be presented to the user. Add a circle that present the status of the flow, starting from 0 to 100%.
+
+Both the "issuance" and the "presentation" can use the same state web API and the state hidden filed.
+
+
+ 
