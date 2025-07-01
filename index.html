@@ -186,8 +186,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form id="issuanceForm">
 
+                                <!-- Issuance Form -->
+                                <form id="issuanceForm">
                                     <div class="mb-3">
                                         <label for="displayName" class="form-label">Display Name</label>
                                         <input type="text" class="form-control" id="displayName" required>
@@ -205,12 +206,12 @@
                                 </form>
 
                                 <!-- Error message for issuance -->
-                                <div id="issuanceError" class="alert alert-danger" style="display: none;" role="alert">
+                                <div id="issuanceErrorContainer" class="alert alert-danger" style="display: none;" role="alert">
                                     <i class="bi bi-exclamation-triangle"></i>
-                                    <span id="issuanceErrorMessage"></span>
+                                    <span id="issuanceError"></span>
                                 </div>
 
-                                <!-- Present the QR code-->
+                                <!-- Present the QR code of the issuance -->
                                 <div id="issuanceQRContainer" style="display: none;">
                                     <div class="d-flex justify-content-center">
                                         <div class="text-center">
@@ -220,18 +221,20 @@
                                     </div>
                                 </div>
 
-                                <!-- Display the PIN code -->
+                                <!-- Display the PIN code for the issuance -->
                                 <div id="issuancePinCodeContainer" class="text-center" style="display: none;">
-                                    
+
                                 </div>
 
-                                <div id="issuanceStatus" class="status-section">
+                                <!-- Issuance Status -->
+                                <div id="issuanceStatusContainer" class="status-section">
                                     <hr>
                                     <div class="d-flex align-items-center ">
                                         <div class="progress-circle" id="issuanceProgress">
                                             <div class="progress-circle-inner">0%</div>
                                         </div>
-                                        <p id="issuanceStatusText" class="text-muted ms-3 mb-0">Waiting for response...</p>
+                                        <p id="issuanceStatusText" class="text-muted ms-3 mb-0">Waiting for response...
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -258,22 +261,41 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="text-center">
-                                    <p class="lead">Ready to share your verified credentials?</p>
+                                <div id="presentationPromptContainer" class="text-center">
+                                    <p class="lead">Ready to share your verified ID credentials with us?</p>
                                     <button class="btn btn-primary btn-lg" onclick="StartPresentationFlow()">
                                         <i class="bi bi-share"></i> Start Presentation
                                     </button>
                                 </div>
 
-                                <div id="presentationStatus" class="status-section">
+
+                                <!-- Error message for presentation -->
+                                <div id="presentationErrorContainer" class="alert alert-danger" style="display: none;"
+                                    role="alert">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    <span id="presentationError"></span>
+                                </div>
+
+                                <!-- Present the QR code of the presentation -->
+                                <div id="presentationQRContainer" style="display: none;">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="text-center">
+                                            <h3>Scan QR Code with your mobile device</h3>
+                                            <div id="presentationQR" class="qr-container"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Presentation Status -->
+                                <div id="presentationStatusContainer" class="status-section">
                                     <hr>
-                                    <div class="text-center">
-                                        <h4>Scan QR Code with your mobile device</h4>
-                                        <div id="presentationQR" class="qr-container"></div>
+                                    <div class="d-flex align-items-center ">
                                         <div class="progress-circle" id="presentationProgress">
                                             <div class="progress-circle-inner">0%</div>
                                         </div>
-                                        <p id="presentationStatusText" class="text-muted">Waiting for response...</p>
+                                        <p id="presentationStatusText" class="text-muted ms-3 mb-0">Waiting for
+                                            response...
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -308,8 +330,8 @@
             $('#homePage').hide();
             $('#issuanceUI').show();
             $('#presentationUI').hide();
-            $('#issuanceStatus').hide();
-            $('#issuanceError').hide();
+            $('#issuanceStatusContainer').hide();
+            $('#issuanceErrorContainer').hide();
             $('#issuanceForm')[0].reset();
             $('#issuanceForm').show();
             $('#photoPreview').empty();
@@ -320,7 +342,11 @@
             $('#homePage').hide();
             $('#issuanceUI').hide();
             $('#presentationUI').show();
-            $('#presentationStatus').hide();
+            $('#presentationStatusContainer').hide();
+            $('#presentationErrorContainer').hide();
+            $('#presentationPromptContainer').show();
+            $('#presentationQRContainer').hide();
+            $('#presentationStatusText').text('');
             clearStatusCheck();
         }
 
@@ -365,18 +391,18 @@
             const displayName = $('#displayName').val();
 
             // Hide any previous errors
-            $('#issuanceError').hide();
+            $('#issuanceErrorContainer').hide();
 
             // Validate display name
             if (!displayName.trim()) {
                 // Render the error message
-                $('#issuanceErrorMessage').text('Please enter a display name');
-                $('#issuanceError').show();
+                $('#issuanceError').text('Please enter a display name');
+                $('#issuanceErrorContainer').show();
                 return;
             }
 
             // Show the status section
-            $('#issuanceStatus').show();
+            $('#issuanceStatusContainer').show();
 
             // Hide the issuance form and render the QR code
             $('#issuanceForm').hide();
@@ -436,8 +462,8 @@
                     }
 
                     // Render the error message
-                    $('#issuanceErrorMessage').text(errorMessage);
-                    $('#issuanceError').show();
+                    $('#issuanceError').text(errorMessage);
+                    $('#issuanceErrorContainer').show();
                 }
             });
         }
@@ -445,19 +471,62 @@
 
         // Start Presentation Flow
         function StartPresentationFlow() {
+
+            // Set a state value for the presentation flow
+            const payload = {
+                state: generateGUID()
+            };
+
+            // Store the current state
+            $('#currentState').val(payload.state);
+
+            // Hide any previous errors
+            $('#presentationErrorContainer').hide();
+            
+            // Hide the prompt container
+            $('#presentationPromptContainer').hide();
+
+            // Show the status section
+            $('#presentationStatusContainer').show();
+
+            // Update the progress and status text
+            updateProgress("presentation", 10, 'Processing...');
+
             $.ajax({
-                url: 'https://localhost/presentation',
+                url: 'https://woodgroove.azure-api.net/vid/presentationfordemo',
                 type: 'POST',
-                data: JSON.stringify({}),
+                data: JSON.stringify(payload),
                 contentType: 'application/json',
                 success: function (response) {
-                    $('#currentState').val(response.state);
+
+                    console.log('Presentation flow started:', response);
+
+                    // Update the progress and status text
+                    updateProgress("presentation", 35, 'Please scan the QR code with your mobile device');
+
+                    // Render the QR code
+                    $('#presentationQRContainer').show();
                     renderQRCode(response.url, 'presentationQR');
-                    $('#presentationStatus').show();
+                    
+                    // Start checking the status
                     startStatusCheck('presentation');
                 },
                 error: function (xhr, status, error) {
-                    alert('Error starting presentation flow: ' + error);
+                    console.error('Issuance flow error:', xhr.responseText);
+                    let errorMessage = 'Error starting issuance flow: ' + error;
+
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error && response.error.message) {
+                            errorMessage = response.error.message;
+                        }
+                    } catch (e) {
+                        // If parsing fails, use the default error message
+                    }
+
+                    // Render the error message
+                    $('#presentationError').text(errorMessage);
+                    $('#presentationErrorContainer').show();
                 }
             });
         }
@@ -468,14 +537,17 @@
             const container = document.getElementById(containerId);
             container.innerHTML = '';
 
+            console.log('Rendering QR code for URL:', url);
+            console.log('Container ID:', container.id);
+
             // Create a new QR code
-            var qrcode = new QRCode(document.getElementById(containerId), {
+            var qrcode = new QRCode(container, {
                 text: url,
                 width: 170,
                 height: 170,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+                correctLevel: QRCode.CorrectLevel.M
             });
 
             // Show the QR code container
@@ -530,7 +602,10 @@
                                 // Hide the issuance QR code container
                                 $('#issuanceQRContainer').hide();
                             } else {
-                                message = 'Waiting for user to present credentials';
+                                message = 'Please select the credentials to present on your mobile device';
+
+                                // Hide the presentation QR code container
+                                $('#presentationQRContainer').hide();
                             }
 
                             break;
@@ -544,6 +619,7 @@
 
                         case 'presentation_verified':
                             progress = 100;
+                            message = 'Your credentials have been successfully verified.';
 
                             break;
                     }
