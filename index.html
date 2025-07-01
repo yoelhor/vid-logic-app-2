@@ -11,7 +11,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- QR Code Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
     <style>
         .navbar-brand {
@@ -33,26 +33,26 @@
         }
 
         .progress-circle {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: conic-gradient(#198754 0deg, #e9ecef 0deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px auto;
+            margin: 20px 0;
         }
 
         .progress-circle-inner {
-            width: 90px;
-            height: 90px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .qr-container {
@@ -69,6 +69,13 @@
             max-width: 200px;
             max-height: 200px;
             margin-top: 10px;
+        }
+
+        .pin-code {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -124,7 +131,8 @@
                     <div class="col-lg-10">
                         <div class="text-center mb-5">
                             <h1 class="display-5 mb-3">Your Gateway to Verified ID Credentials</h1>
-                            <p class="lead text-muted">Secure credential issuance and verification sample application</p>
+                            <p class="lead text-muted">Secure credential issuance and verification sample application
+                            </p>
                         </div>
 
                         <div class="row g-4">
@@ -136,7 +144,7 @@
                                         </div>
                                         <h3 class="card-title">Obtain Credential</h3>
                                         <p class="card-text text-muted">Request and receive your Verified ID digital
-                                             credential</p>
+                                            credential</p>
                                         <button class="btn btn-primary btn-lg">Get Started</button>
                                     </div>
                                 </div>
@@ -179,6 +187,7 @@
                             </div>
                             <div class="card-body">
                                 <form id="issuanceForm">
+
                                     <div class="mb-3">
                                         <label for="displayName" class="form-label">Display Name</label>
                                         <input type="text" class="form-control" id="displayName" required>
@@ -195,15 +204,34 @@
                                     </button>
                                 </form>
 
+                                <!-- Error message for issuance -->
+                                <div id="issuanceError" class="alert alert-danger" style="display: none;" role="alert">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    <span id="issuanceErrorMessage"></span>
+                                </div>
+
+                                <!-- Present the QR code-->
+                                <div id="issuanceQRContainer" style="display: none;">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="text-center">
+                                            <h3>Scan QR Code with your mobile device</h3>
+                                            <div id="issuanceQR" class="qr-container"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Display the PIN code -->
+                                <div id="issuancePinCodeContainer" class="text-center" style="display: none;">
+                                    
+                                </div>
+
                                 <div id="issuanceStatus" class="status-section">
                                     <hr>
-                                    <div class="text-center">
-                                        <h4>Scan QR Code with your mobile device</h4>
-                                        <div id="issuanceQR" class="qr-container"></div>
+                                    <div class="d-flex align-items-center ">
                                         <div class="progress-circle" id="issuanceProgress">
                                             <div class="progress-circle-inner">0%</div>
                                         </div>
-                                        <p id="issuanceStatusText" class="text-muted">Waiting for response...</p>
+                                        <p id="issuanceStatusText" class="text-muted ms-3 mb-0">Waiting for response...</p>
                                     </div>
                                 </div>
                             </div>
@@ -281,6 +309,7 @@
             $('#issuanceUI').show();
             $('#presentationUI').hide();
             $('#issuanceStatus').hide();
+            $('#issuanceError').hide();
             $('#issuanceForm')[0].reset();
             $('#photoPreview').empty();
             clearStatusCheck();
@@ -294,6 +323,22 @@
             clearStatusCheck();
         }
 
+        // Function to generate a GUID
+        function generateGUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Function to generate a random PIN code between 1336 and 9984
+        function generatePINCode() {
+            const min = 1336;
+            const max = 9984;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
         // Photo preview functionality
         $('#photoUpload').on('change', function (e) {
             const file = e.target.files[0];
@@ -301,7 +346,7 @@
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     $('#photoPreview').html(`
-                        <img src="${e.target.result}" class="photo-preview img-thumbnail" alt="Photo preview">
+                        <img id="photoPreviewImg" src="${e.target.result}" class="photo-preview img-thumbnail" alt="Photo preview">
                     `);
                 };
                 reader.readAsDataURL(file);
@@ -317,36 +362,85 @@
         // Start Issuance Flow
         function StartIssuanceFlow() {
             const displayName = $('#displayName').val();
-            const photoFile = $('#photoUpload')[0].files[0];
 
+            // Hide any previous errors
+            $('#issuanceError').hide();
+
+            // Validate display name
             if (!displayName.trim()) {
-                alert('Please enter a display name');
+                // Render the error message
+                $('#issuanceErrorMessage').text('Please enter a display name');
+                $('#issuanceError').show();
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('displayName', displayName);
-            if (photoFile) {
-                formData.append('photo', photoFile);
-            }
+            // Show the status section
+            $('#issuanceStatus').show();
 
+            // Hide the issuance form and render the QR code
+            $('#issuanceForm').hide();
+
+            // Prepare the payload for issuance 
+            const payload = {
+                // Generate a new state for the issuance in GUID format
+                state: generateGUID(),
+                displayName: displayName,
+                pin: generatePINCode(),
+
+                // Check if the photoPreviewImg src is set, if not set to null
+                photo: $('#photoPreviewImg').length ? $('#photoPreviewImg').attr('src') : ""
+
+            };
+
+            // Store the current state
+            $('#currentState').val(payload.state);
+
+            // Update the progress and status text
+            updateProgress("issuance", 10, 'Processing...');
+
+            // Start the issuance flow
             $.ajax({
-                url: 'https://localhost/issueance',
+                url: 'https://woodgroove.azure-api.net/vid/issuance',
                 type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
                 success: function (response) {
-                    $('#currentState').val(response.state);
-                    generateQRCode(response.url, 'issuanceQR');
-                    $('#issuanceStatus').show();
+                    console.log('Issuance flow started:', response);
+
+                    // Update the progress and status text
+                    updateProgress("issuance", 35, 'Please scan the QR code with your mobile device');
+
+                    // Render the PIN code
+                    $('#issuancePinCodeContainer').html('<div class="pin-code">PIN code: ' + payload.pin + '</div>');
+                    $('#issuancePinCodeContainer').show();
+
+                    // Render the QR code
+                    renderQRCode(response.url, 'issuanceQR');
+                    $('#issuanceQRContainer').show();
+
+                    // Start checking the status
                     startStatusCheck('issuance');
                 },
                 error: function (xhr, status, error) {
-                    alert('Error starting issuance flow: ' + error);
+                    console.error('Issuance flow error:', xhr.responseText);
+                    let errorMessage = 'Error starting issuance flow: ' + error;
+
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error && response.error.message) {
+                            errorMessage = response.error.message;
+                        }
+                    } catch (e) {
+                        // If parsing fails, use the default error message
+                    }
+
+                    // Render the error message
+                    $('#issuanceErrorMessage').text(errorMessage);
+                    $('#issuanceError').show();
                 }
             });
         }
+
 
         // Start Presentation Flow
         function StartPresentationFlow() {
@@ -357,7 +451,7 @@
                 contentType: 'application/json',
                 success: function (response) {
                     $('#currentState').val(response.state);
-                    generateQRCode(response.url, 'presentationQR');
+                    renderQRCode(response.url, 'presentationQR');
                     $('#presentationStatus').show();
                     startStatusCheck('presentation');
                 },
@@ -368,20 +462,23 @@
         }
 
         // Generate QR Code
-        function generateQRCode(url, containerId) {
+        function renderQRCode(url, containerId) {
+            // Clear previous QR code
             const container = document.getElementById(containerId);
             container.innerHTML = '';
 
-            QRCode.toCanvas(container, url, {
-                width: 256,
-                height: 256,
-                margin: 2
-            }, function (error) {
-                if (error) {
-                    console.error('QR Code generation error:', error);
-                    container.innerHTML = '<p class="text-danger">Error generating QR code</p>';
-                }
+            // Create a new QR code
+            var qrcode = new QRCode(document.getElementById(containerId), {
+                text: url,
+                width: 170,
+                height: 170,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
             });
+
+            // Show the QR code container
+            $(`#${containerId}Container`).show();
         }
 
         // Start status checking
@@ -402,28 +499,70 @@
             }
 
             $.ajax({
-                url: 'https://localhost/status',
+                url: 'https://woodgroove.azure-api.net/vid/status',
                 type: 'POST',
                 data: JSON.stringify({ state: state }),
                 contentType: 'application/json',
                 success: function (response) {
-                    updateProgress(type, response.progress || 0);
-                    updateStatusText(type, response.status || 'Processing...');
+
+                    console.log('Status check response:', response);
+
+                    // Update progress based on status
+                    let progress = 0;
+                    let message = '';
+                    switch (response.status) {
+                        case 'request_created':
+                            progress = 35;
+
+                            if (type === 'issuance') {
+                                message = 'Please scan the QR code with your mobile device';
+                            } else {
+                                message = 'Waiting for request to be processed';
+                            }
+                            break;
+                        case 'request_retrieved':
+                            progress = 60;
+
+                            if (type === 'issuance') {
+                                message = 'Please enter the PIN code on your mobile device';
+
+                                // Hide the issuance QR code container
+                                $('#issuanceQRContainer').hide();
+                            } else {
+                                message = 'Waiting for user to present credentials';
+                            }
+
+                            break;
+
+                        case 'issuance_successful':
+                            progress = 100;
+                            message = 'You successfully obtained your credential, please check your mobile device';
+
+                            // Hide the issuance PIN code container
+                            $('#issuancePinCodeContainer').hide();
+
+                        case 'presentation_verified':
+                            progress = 100;
+
+                            break;
+                    }
+
+
+                    updateProgress(type, progress, message);
 
                     // Stop checking if completed
-                    if (response.progress >= 100 || response.status === 'completed') {
+                    if (progress >= 100 || response.status === 'completed') {
                         clearStatusCheck();
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error('Status check error:', error);
-                    updateStatusText(type, 'Error checking status');
                 }
             });
         }
 
         // Update progress circle
-        function updateProgress(type, progress) {
+        function updateProgress(type, progress, message) {
             const progressElement = $(`#${type}Progress`);
             const innerElement = progressElement.find('.progress-circle-inner');
 
@@ -435,11 +574,9 @@
             progressElement.css('background',
                 `conic-gradient(#198754 ${degrees}deg, #e9ecef ${degrees}deg)`
             );
-        }
 
-        // Update status text
-        function updateStatusText(type, status) {
-            $(`#${type}StatusText`).text(status);
+            // Update status text
+            $(`#${type}StatusText`).text(message);
         }
 
         // Clear status checking
