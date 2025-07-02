@@ -9,50 +9,114 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
     <style>
-        .navbar-brand {
-            font-weight: bold;
+        /* Custom grayscale palette with Bootstrap primary colors for buttons */
+        :root {
+            --bs-gray-100: #f8f9fa;
+            --bs-gray-200: #e9ecef;
+            --bs-gray-300: #dee2e6;
+            --bs-gray-400: #ced4da;
+            --bs-gray-500: #adb5bd;
+            --bs-gray-600: #6c757d;
+            --bs-gray-700: #495057;
+            --bs-gray-800: #343a40;
+            --bs-gray-900: #212529;
         }
 
-        .hero-section {
-            min-height: 70vh;
+        body {
+            background-color: var(--bs-gray-100);
+            color: var(--bs-gray-800);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .page-header {
+            background-color: var(--bs-gray-900);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .page-header .nav-link {
+            color: var(--bs-gray-300) !important;
+            transition: color 0.2s;
+        }
+
+        .page-header .nav-link:hover {
+            color: white !important;
+        }
+
+        .page-container {
+            min-height: calc(100vh - 80px);
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
         }
 
-        .card-hover {
-            transition: transform 0.2s;
+        .main-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--bs-gray-200);
         }
 
-        .card-hover:hover {
-            transform: translateY(-5px);
+        .main-option-card {
+            background: white;
+            border: 2px solid var(--bs-gray-200);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
+        .main-option-card:hover {
+            border-color: var(--bs-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
 
         .progress-circle {
-            width: 80px;
-            height: 80px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: conic-gradient(#198754 0deg, #e9ecef 0deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin-right: 20px;
         }
 
         .progress-circle-inner {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .notification-area {
+            background-color: #eceff1;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
         }
 
         .qr-container {
@@ -81,624 +145,613 @@
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <!-- Header Navigation -->
+    <header class="page-header bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#" onclick="showHomePage()">
-                <i class="bi bi-shield-check"></i> Verified ID Sample
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="renderIssuanceUI()">
-                            <i class="bi bi-plus-circle"></i> Obtain Credential
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#" onclick="main_ShowSection()">
+                        <i class="fas fa-shield-alt me-2"></i>Verified ID Sample
+                    </a>
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="#" onclick="issuance_ShowSection()">
+                            <i class="fas fa-plus-circle me-1"></i>Obtain Credential
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="renderPresentationUI()">
-                            <i class="bi bi-card-checklist"></i> Present Credentials
+                        <a class="nav-link" href="#" onclick="presentation_ShowSection()">
+                            <i class="fas fa-id-card me-1"></i>Present Credentials
                         </a>
-                    </li>
-                </ul>
-
-                <ul class="navbar-nav">
-                    <li class="nav-item">
                         <a class="nav-link" href="https://github.com/yoelhor/vid-logic-app-2" target="_blank">
-                            <i class="bi bi-github"></i> GitHub
+                            <i class="fab fa-github me-1"></i>GitHub
                         </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="https://github.com/yoelhor/vid-logic-app-2/privacy" target="_blank">
-                            <i class="bi bi-shield-lock"></i> Privacy
+                            <i class="fas fa-shield-alt me-1"></i>Privacy
                         </a>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="container-fluid">
-        <!-- Home Page -->
-        <div id="homePage" class="hero-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
-                        <div class="text-center mb-5">
-                            <h1 class="display-5 mb-3">Your Gateway to Verified ID Credentials</h1>
-                            <p class="lead text-muted">Secure credential issuance and verification sample application
-                            </p>
-                        </div>
 
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="card h-100 shadow-sm card-hover" onclick="renderIssuanceUI()">
-                                    <div class="card-body text-center p-5">
-                                        <div class="mb-3">
-                                            <i class="bi bi-plus-circle text-primary" style="font-size: 3rem;"></i>
-                                        </div>
-                                        <h3 class="card-title">Obtain Credential</h3>
-                                        <p class="card-text text-muted">Request and receive your Verified ID digital
-                                            credential</p>
-                                        <button class="btn btn-primary btn-lg">Get Started</button>
-                                    </div>
-                                </div>
+    <!-- Page content -->
+    <div class="page-container">
+        <div class="container">
+
+            <!-- Main Section -->
+            <div id="main-section" class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="main-option-card p-4" onclick="issuance_ShowSection()">
+                                <i class="fas fa-plus-circle text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h4 class="text-center">Obtain Credential</h4>
+                                <p class="text-center text-muted">Request and receive a new verified ID credential</p>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="card h-100 shadow-sm card-hover" onclick="renderPresentationUI()">
-                                    <div class="card-body text-center p-5">
-                                        <div class="mb-3">
-                                            <i class="bi bi-card-checklist text-primary" style="font-size: 3rem;"></i>
-                                        </div>
-                                        <h3 class="card-title">Present Credential</h3>
-                                        <p class="card-text text-muted">Share your verified credentials securely with
-                                            us</p>
-                                        <button class="btn btn-primary btn-lg">Present Now</button>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="main-option-card p-4" onclick="presentation_ShowSection()">
+                                <i class="fas fa-id-card text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h4 class="text-center">Present Credentials</h4>
+                                <p class="text-center text-muted">Share your verified credentials</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Issuance UI -->
-        <div id="issuanceUI" class="hero-section" style="display: none;">
-            <div class="container">
+            <!-- Issuance Section -->
+            <div id="issuance-section">
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="card shadow">
-                            <div class="card-header bg-primary text-white">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h2 class="mb-0">
-                                        <i class="bi bi-plus-circle"></i> Obtain New Credential
-                                    </h2>
-                                    <button type="button" class="btn btn-primary" onclick="showHomePage()">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
+                    <div class="col-md-8">
+                        <div class="main-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3><i class="fas fa-plus-circle text-primary me-2"></i>Obtain Credential</h3>
+                                <button type="button" class="btn-close" onclick="main_ShowSection()"></button>
+                            </div>
+
+                            <!-- Issuance Content Area -->
+                            <div id="issuance-content-area">
+                                <div class="mb-3">
+                                    <label for="issuance-display-name" class="form-label">Display Name</label>
+                                    <input type="text" class="form-control" id="issuance-display-name"
+                                        placeholder="Enter your display name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="issuance-photo-upload" class="form-label">Photo</label>
+                                    <input type="file" class="form-control" id="issuance-photo-upload" accept="image/*">
+
+                                    <div id="issuance-photo-preview-container" class="mt-3 text-center">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body">
 
-                                <!-- Issuance Form -->
-                                <form id="issuanceForm">
-                                    <div class="mb-3">
-                                        <label for="displayName" class="form-label">Display Name</label>
-                                        <input type="text" class="form-control" id="displayName" required>
+                            <!-- QR Code Area -->
+                            <div id="issuance-qr-area" class="issuance-qr-container" style="display: none;">
+                                <p>Scan QR Code with your mobile device</p>
+                                <div id="issuance-qr-code"></div>
+                            </div>
+
+                            <!-- PIN Code Area -->
+                            <div id="issuance-pin-area" style="display: none;">
+                            </div>
+
+                            <!-- Issuance Error Area -->
+                            <div id="issuance-error-area" class="alert alert-danger" role="alert"
+                                style="display: none;">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <span id="issuance-error"></span>
+                            </div>
+
+                            <!-- Issuance Notification Area -->
+                            <div id="issuance-notification-area" class="notification-area" style="display: none;">
+                                <div class="d-flex align-items-center">
+                                    <div class="progress-circle" id="issuance-progress-circle">
+                                        <div class="progress-circle-inner">0%</div>
                                     </div>
-
-                                    <div class="mb-3">
-                                        <label for="photoUpload" class="form-label">Upload Photo</label>
-                                        <input type="file" class="form-control" id="photoUpload" accept="image/*">
-                                        <div id="photoPreview"></div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary btn-lg">
-                                        <i class="bi bi-send"></i> Submit Request
-                                    </button>
-                                </form>
-
-                                <!-- Error message for issuance -->
-                                <div id="issuanceErrorContainer" class="alert alert-danger" style="display: none;"
-                                    role="alert">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    <span id="issuanceError"></span>
+                                    <div id="issuance-status-message"></div>
                                 </div>
+                            </div>
 
-                                <!-- Present the QR code of the issuance -->
-                                <div id="issuanceQRContainer" style="display: none;">
-                                    <div class="d-flex justify-content-center">
-                                        <div class="text-center">
-                                            <h3>Scan QR Code with your mobile device</h3>
-                                            <div id="issuanceQR" class="qr-container"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Display the PIN code for the issuance -->
-                                <div id="issuancePinCodeContainer" class="text-center" style="display: none;">
-
-                                </div>
-
-                                <!-- Issuance Status -->
-                                <div id="issuanceStatusContainer" class="status-section">
-                                    <hr>
-                                    <div class="d-flex align-items-center ">
-                                        <div class="progress-circle" id="issuanceProgress">
-                                            <div class="progress-circle-inner">0%</div>
-                                        </div>
-                                        <p id="issuanceStatusText" class="text-muted ms-3 mb-0">Waiting for response...
-                                        </p>
-                                    </div>
-                                </div>
+                            <!-- Issuance Submit Button -->
+                            <div class="d-grid">
+                                <button id="issuance-submit-btn" type="button" class="btn btn-primary btn-lg"
+                                    onclick="issuance_StartFlow()">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Request
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Presentation UI -->
-        <div id="presentationUI" class="hero-section" style="display: none;">
-            <div class="container">
+            <!-- Presentation Section -->
+            <div id="presentation-section">
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="card shadow">
-                            <div class="card-header bg-primary text-white">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h2 class="mb-0">
-                                        <i class="bi bi-card-checklist"></i> Present Your Credential
-                                    </h2>
-                                    <button type="button" class="btn btn-primary" onclick="showHomePage()">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
+                    <div class="col-md-8">
+                        <div class="main-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3><i class="fas fa-plus-circle text-primary me-2"></i>Present Credentials</h3>
+                                <button type="button" class="btn-close" onclick="main_ShowSection()"></button>
+                            </div>
+
+                            <!-- presentation Content Area -->
+                            <div id="presentation-content-area">
+                                <p class="mb-3">Ready to share your verified ID credentials with us? To present your
+                                    credentials, please click the button below to start the
+                                    process.</p>
+                            </div>
+
+                            <!-- presentation Claims Area -->
+                            <div id="presentation-claims-area" class="mt-4" style="display: none;">
+                                <h4>Your Claims</h4>
+                                <ul id="presentation-claims-list" class="list-unstyled">
+
+                                </ul>
+                            </div>
+
+                            <!-- QR Code Area -->
+                            <div id="presentation-qr-area" class="presentation-qr-container" style="display: none;">
+                                <p>Scan QR Code with your mobile device</p>
+                                <div id="presentation-qr-code"></div>
+                            </div>
+
+                            <!-- presentation Error Area -->
+                            <div id="presentation-error-area" class="alert alert-danger" role="alert"
+                                style="display: none;">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <span id="presentation-error"></span>
+                            </div>
+
+                            <!-- presentation Notification Area -->
+                            <div id="presentation-notification-area" class="notification-area" style="display: none;">
+                                <div class="d-flex align-items-center">
+                                    <div class="progress-circle" id="presentation-progress-circle">
+                                        <div class="progress-circle-inner">0%</div>
+                                    </div>
+                                    <div id="presentation-status-message"></div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div id="presentationPromptContainer" class="text-center">
-                                    <p class="lead">Ready to share your verified ID credentials with us?</p>
-                                    <button class="btn btn-primary btn-lg" onclick="StartPresentationFlow()">
-                                        <i class="bi bi-share"></i> Start Presentation
-                                    </button>
-                                </div>
 
-                                <!-- Claims container for presentation -->
-                                <div id="presentationClaimsContainer" class="mt-4" style="display: none;">
-                                    <h4>Your Claims</h4>
-                                    <ul id="presentationClaims" class="list-unstyled">
-
-                                    </ul>
-                                </div>
-
-                                <!-- Error message for presentation -->
-                                <div id="presentationErrorContainer" class="alert alert-danger" style="display: none;"
-                                    role="alert">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    <span id="presentationError"></span>
-                                </div>
-
-                                <!-- Present the QR code of the presentation -->
-                                <div id="presentationQRContainer" style="display: none;">
-                                    <div class="d-flex justify-content-center">
-                                        <div class="text-center">
-                                            <h3>Scan QR Code with your mobile device</h3>
-                                            <div id="presentationQR" class="qr-container"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Presentation Status -->
-                                <div id="presentationStatusContainer" class="status-section">
-                                    <hr>
-                                    <div class="d-flex align-items-center ">
-                                        <div class="progress-circle" id="presentationProgress">
-                                            <div class="progress-circle-inner">0%</div>
-                                        </div>
-                                        <p id="presentationStatusText" class="text-muted ms-3 mb-0">Waiting for
-                                            response...
-                                        </p>
-                                    </div>
-                                </div>
+                            <!-- presentation Submit Button -->
+                            <div class="d-grid">
+                                <button id="presentation-submit-btn" type="button" class="btn btn-primary btn-lg"
+                                    onclick="presentation_StartFlow()">
+                                    <i class="fas fa-qrcode me-2"></i>Generate QR Code
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Hidden State Field -->
-    <input type="hidden" id="currentState" value="">
+            <!-- Hidden State Field -->
+            <input type="hidden" id="currentState" value="">
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
-    <script>
-        // Global variables
-        let statusCheckInterval;
+            <script>
+                // Global variables
+                let statusCheckInterval;
 
-        // Navigation functions
-        function showHomePage() {
-            $('#homePage').show();
-            $('#issuanceUI').hide();
-            $('#presentationUI').hide();
-            clearStatusCheck();
-        }
-
-        function renderIssuanceUI() {
-            $('#homePage').hide();
-            $('#issuanceUI').show();
-            $('#presentationUI').hide();
-            $('#issuanceStatusContainer').hide();
-            $('#issuanceErrorContainer').hide();
-            $('#issuanceForm')[0].reset();
-            $('#issuanceForm').show();
-            $('#photoPreview').empty();
-            clearStatusCheck();
-        }
-
-        function renderPresentationUI() {
-            $('#homePage').hide();
-            $('#issuanceUI').hide();
-            $('#presentationUI').show();
-            $('#presentationStatusContainer').hide();
-            $('#presentationErrorContainer').hide();
-            $('#presentationPromptContainer').show();
-            $('#presentationQRContainer').hide();
-            $('#presentationStatusText').text('');
-            clearStatusCheck();
-        }
-
-        // Function to generate a GUID
-        function generateGUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                const r = Math.random() * 16 | 0;
-                const v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
-        // Function to generate a random PIN code between 1336 and 9984
-        function generatePINCode() {
-            const min = 1336;
-            const max = 9984;
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        // Photo preview functionality
-        $('#photoUpload').on('change', function (e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#photoPreview').html(`
-                        <img id="photoPreviewImg" src="${e.target.result}" class="photo-preview img-thumbnail" alt="Photo preview">
-                    `);
+                // Web API endpoints 
+                const ENDPOINTS = {
+                    ISSUANCE: 'https://woodgroove.azure-api.net/vid/issuance',
+                    PRESENTATION: 'https://woodgroove.azure-api.net/vid/presentationfordemo',
+                    STATUS: 'https://woodgroove.azure-api.net/vid/status'
                 };
-                reader.readAsDataURL(file);
-            }
-        });
 
-        // Issuance form submission
-        $('#issuanceForm').on('submit', function (e) {
-            e.preventDefault();
-            StartIssuanceFlow();
-        });
+                const MESSAGES = {
+                    REQUEST_CREATED: 'Please scan the QR code with your mobile device.',
+                    REQUEST_RETRIEVED_ISSUANCE: 'Please enter the PIN code on your mobile device.',
+                    REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device.',
+                    ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device.',
+                    PRESENTATION_VERIFIED: 'Your credentials have been successfully verified.',
+                    ERROR_GENERIC: 'An error occurred. Please try again.',
+                    ERROR_DISPLAY_NAME: 'Please enter a display name',
+                    ERROR_PHOTO: 'Please select a photo'
+                };
 
-        // Start Issuance Flow
-        function StartIssuanceFlow() {
-            const displayName = $('#displayName').val();
+                // Navigation functions
+                function main_ShowSection() {
+                    // Navigate to the main section
+                    $('#main-section').show();
+                    $('#issuance-section').hide();
+                    $('#presentation-section').hide();
 
-            // Hide any previous errors
-            $('#issuanceErrorContainer').hide();
+                    // Reset the status check interval
+                    clearStatusCheck();
+                }
 
-            // Validate display name
-            if (!displayName.trim()) {
-                // Render the error message
-                $('#issuanceError').text('Please enter a display name');
-                $('#issuanceErrorContainer').show();
-                return;
-            }
+                function issuance_ShowSection() {
+                    // Navigate to the issuance section
+                    $('#main-section').hide();
+                    $('#issuance-section').show();
+                    $('#presentation-section').hide();
 
-            // Show the status section
-            $('#issuanceStatusContainer').show();
+                    // Show and hide relevant areas within the issuance section
+                    $('#issuance-notification-area').hide();
+                    $('#issuance-error-area').hide();
+                    $('#issuance-qr-area').hide();
+                    $('#issuance-content-area').show();
+                    $('#issuance-submit-btn').show();
 
-            // Hide the issuance form and render the QR code
-            $('#issuanceForm').hide();
+                    // Reset the issuance data
+                    $('#issuance-display-name').val('');
+                    $('#issuance-photo-upload').val('');
+                    $('#issuance-status-message').text('');
+                    $('#issuance-photo-preview-container').empty();
 
-            // Prepare the payload for issuance 
-            const payload = {
-                // Generate a new state for the issuance in GUID format
-                state: generateGUID(),
-                displayName: displayName,
-                pin: generatePINCode(),
+                    // Reset the status check interval
+                    clearStatusCheck();
+                }
 
-                // Check if the photoPreviewImg src is set, if not set to null
-                photo: $('#photoPreviewImg').length ? $('#photoPreviewImg').attr('src') : ""
+                function presentation_ShowSection() {
+                    // Navigate to the presentation section
+                    $('#main-section').hide();
+                    $('#issuance-section').hide();
+                    $('#presentation-section').show();
 
-            };
+                    // Show and hide relevant areas within the presentation section
+                    $('#presentation-notification-area').hide();
+                    $('#presentation-error-area').hide();
+                    $('#presentation-qr-area').hide();
+                    $('#presentation-claims-area').hide();
+                    $('#presentation-content-area').show();
+                    $('#presentation-submit-btn').show();
 
-            // Store the current state
-            $('#currentState').val(payload.state);
+                    // Reset the presentation data
+                    $('#presentation-status-message').text('');
+                    $('#presentation-claims-list').empty();
 
-            // Update the progress and status text
-            updateProgress("issuance", 10, 'Processing...');
+                    // Reset the status check interval
+                    clearStatusCheck();
+                }
 
-            // Start the issuance flow
-            $.ajax({
-                url: 'https://woodgroove.azure-api.net/vid/issuance',
-                type: 'POST',
-                data: JSON.stringify(payload),
-                contentType: 'application/json',
-                success: function (response) {
-                    console.log('Issuance flow started:', response);
+                // Function to generate a GUID
+                function generateGUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        const r = Math.random() * 16 | 0;
+                        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
 
-                    // Update the progress and status text
-                    updateProgress("issuance", 35, 'Please scan the QR code with your mobile device');
+                // Function to generate a random PIN code between 1336 and 9984
+                function generatePINCode() {
+                    const min = 1336;
+                    const max = 9984;
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
 
-                    // Render the PIN code
-                    $('#issuancePinCodeContainer').html('<div class="pin-code">PIN code: ' + payload.pin + '</div>');
-                    $('#issuancePinCodeContainer').show();
+                // Photo preview functionality
+                $('#issuance-photo-upload').on('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#issuance-photo-preview-container').html(`
+                        <img id="issuance-photo-preview-containerImg" src="${e.target.result}" class="photo-preview img-thumbnail" alt="Photo preview">
+                    `);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
 
-                    // Render the QR code
-                    renderQRCode(response.url, 'issuanceQR');
-                    $('#issuanceQRContainer').show();
+                // Start Issuance Flow
+                function issuance_StartFlow() {
+                    const displayName = $('#issuance-display-name').val();
 
-                    // Start checking the status
-                    startStatusCheck('issuance');
-                },
-                error: function (xhr, status, error) {
-                    console.error('Issuance flow error:', xhr.responseText);
-                    let errorMessage = 'Error starting issuance flow: ' + error;
+                    // Hide any previous errors
+                    $('#issuance-error-area').hide();
 
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.error && response.error.message) {
-                            errorMessage = response.error.message;
-                        }
-                    } catch (e) {
-                        // If parsing fails, use the default error message
+                    // Validate display name
+                    if (!displayName.trim()) {
+                        // Render the error message
+                        $('#issuance-error').text('Please enter a display name');
+                        $('#issuance-error-area').show();
+                        return;
                     }
 
-                    // Render the error message
-                    $('#issuanceError').text(errorMessage);
-                    $('#issuanceErrorContainer').show();
-                }
-            });
-        }
+                    // Show the notification area
+                    $('#issuance-notification-area').show();
 
+                    // Hide the issuance form area
+                    $('#issuance-content-area').hide();
 
-        // Start Presentation Flow
-        function StartPresentationFlow() {
+                    // Hide the issuance submit button
+                    $('#issuance-submit-btn').hide();
 
-            // Set a state value for the presentation flow
-            const payload = {
-                state: generateGUID()
-            };
+                    // Prepare the payload for issuance 
+                    const payload = {
+                        // Generate a new state for the issuance in GUID format
+                        state: generateGUID(),
+                        displayName: displayName,
+                        pin: generatePINCode(),
 
-            // Store the current state
-            $('#currentState').val(payload.state);
+                        // Check if the issuance-photo-preview-containerImg src is set, if not set to null
+                        photo: $('#issuance-photo-preview-containerImg').length ? $('#issuance-photo-preview-containerImg').attr('src') : ""
 
-            // Hide any previous errors
-            $('#presentationErrorContainer').hide();
+                    };
 
-            // Hide the prompt container
-            $('#presentationPromptContainer').hide();
-
-            // Show the status section
-            $('#presentationStatusContainer').show();
-
-            // Update the progress and status text
-            updateProgress("presentation", 10, 'Processing...');
-
-            $.ajax({
-                url: 'https://woodgroove.azure-api.net/vid/presentationfordemo',
-                type: 'POST',
-                data: JSON.stringify(payload),
-                contentType: 'application/json',
-                success: function (response) {
-
-                    console.log('Presentation flow started:', response);
+                    // Store the current state
+                    $('#currentState').val(payload.state);
 
                     // Update the progress and status text
-                    updateProgress("presentation", 35, 'Please scan the QR code with your mobile device');
+                    updateProgress("issuance", 10, 'Processing...');
 
-                    // Render the QR code
-                    $('#presentationQRContainer').show();
-                    renderQRCode(response.url, 'presentationQR');
+                    // Start the issuance flow
+                    $.ajax({
+                        url: ENDPOINTS.ISSUANCE,
+                        type: 'POST',
+                        data: JSON.stringify(payload),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log('Issuance flow started:', response);
 
-                    // Start checking the status
-                    startStatusCheck('presentation');
-                },
-                error: function (xhr, status, error) {
-                    console.error('Issuance flow error:', xhr.responseText);
-                    let errorMessage = 'Error starting issuance flow: ' + error;
+                            // Update the progress and status text
+                            updateProgress("issuance", 35, MESSAGES.REQUEST_CREATED);
 
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        if (response.error && response.error.message) {
-                            errorMessage = response.error.message;
-                        }
-                    } catch (e) {
-                        // If parsing fails, use the default error message
-                    }
+                            // Render the PIN code
+                            $('#issuance-pin-area').html('<div class="pin-code">PIN code: ' + payload.pin + '</div>');
+                            $('#issuance-pin-area').show();
 
-                    // Render the error message
-                    $('#presentationError').text(errorMessage);
-                    $('#presentationErrorContainer').show();
-                }
-            });
-        }
+                            // Render the QR code
+                            renderQRCode(response.url, 'issuance');
 
-        // Generate QR Code
-        function renderQRCode(url, containerId) {
-            // Clear previous QR code
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
+                            // Start checking the status
+                            startStatusCheck('issuance');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Issuance flow error:', xhr.responseText);
+                            let errorMessage = 'Error starting issuance flow: ' + error;
 
-            console.log('Rendering QR code for URL:', url);
-            console.log('Container ID:', container.id);
-
-            // Create a new QR code
-            var qrcode = new QRCode(container, {
-                text: url,
-                width: 170,
-                height: 170,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
-            });
-
-            // Show the QR code container
-            $(`#${containerId}Container`).show();
-        }
-
-        // Start status checking
-        function startStatusCheck(type) {
-            clearStatusCheck();
-
-            statusCheckInterval = setInterval(function () {
-                CheckStatus(type);
-            }, 2000); // Check every 2 seconds
-        }
-
-        // Check Status
-        function CheckStatus(type) {
-            const state = $('#currentState').val();
-
-            if (!state) {
-                return;
-            }
-
-            $.ajax({
-                url: 'https://woodgroove.azure-api.net/vid/status',
-                type: 'POST',
-                data: JSON.stringify({ state: state }),
-                contentType: 'application/json',
-                success: function (response) {
-
-                    console.log('Status check response:', response);
-
-                    // Update progress based on status
-                    let progress = 0;
-                    let message = '';
-                    switch (response.status) {
-                        case 'request_created':
-                            progress = 35;
-                            message = 'Please scan the QR code with your mobile device';
-
-                            break;
-                        case 'request_retrieved':
-                            progress = 60;
-
-                            if (type === 'issuance') {
-                                message = 'Please enter the PIN code on your mobile device';
-
-                                // Hide the issuance QR code container
-                                $('#issuanceQRContainer').hide();
-                            } else {
-                                message = 'Please select the credentials to present on your mobile device';
-
-                                // Hide the presentation QR code container
-                                $('#presentationQRContainer').hide();
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.error && response.error.message) {
+                                    errorMessage = response.error.message;
+                                }
+                            } catch (e) {
+                                // If parsing fails, use the default error message
                             }
 
-                            break;
+                            // Render the error message
+                            $('#issuance-error').text(errorMessage);
+                            $('#issuance-error-area').show();
+                        }
+                    });
+                }
 
-                        case 'issuance_successful':
-                            progress = 100;
-                            message = 'You successfully obtained your credential, please check your mobile device';
 
-                            // Hide the issuance PIN code container
-                            $('#issuancePinCodeContainer').hide();
+                // Start Presentation Flow
+                function presentation_StartFlow() {
 
-                            break;
+                    // Set a state value for the presentation flow
+                    const payload = {
+                        state: generateGUID()
+                    };
 
-                        case 'presentation_verified':
-                            progress = 100;
-                            message = 'Your credentials have been successfully verified.';
+                    // Store the current state
+                    $('#currentState').val(payload.state);
 
-                            // Hide the presentation QR code container
-                            $('#presentationQRContainer').hide();
+                    // Hide any previous errors
+                    $('#presentation-error-area').hide();
 
-                            // Check if the response contains claims
-                            if (response.claims) {
-                                // Show the claims
-                                $('#presentationClaimsContainer').show();
-                                $('#presentationClaims').empty();
+                    // Hide the presentation content area
+                    $('#presentation-content-area').hide();
 
-                                // First take the claims string and parse it
-                                const claims = JSON.parse(response.claims);
+                    // Hide the presentation submit button
+                    $('#presentation-submit-btn').hide();
 
-                                // This is the format of the claims, however we can't use the attributes name directly
-                                //{displayName: 'Yoel Horvitz', photo: ''}
+                    // Show the notification area
+                    $('#presentation-notification-area').show();
 
-                                Object.entries(claims).forEach(([key, value]) => {
+                    // Update the progress and status text
+                    updateProgress("presentation", 10, 'Processing...');
 
-                                    // Hide empty values
-                                    if (value) {
-                                        $('#presentationClaims').append(`<li>${key}: ${value}</li>`);
+                    $.ajax({
+                        url: ENDPOINTS.PRESENTATION,
+                        type: 'POST',
+                        data: JSON.stringify(payload),
+                        contentType: 'application/json',
+                        success: function (response) {
+
+                            console.log('Presentation flow started:', response);
+
+                            // Update the progress and status text
+                            updateProgress("presentation", 35, MESSAGES.REQUEST_CREATED);
+
+                            // Render the QR code
+                            $('#presentationQRContainer').show();
+                            renderQRCode(response.url, 'presentation');
+
+                            // Start checking the status
+                            startStatusCheck('presentation');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Issuance flow error:', xhr.responseText);
+                            let errorMessage = 'Error starting issuance flow: ' + error;
+
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.error && response.error.message) {
+                                    errorMessage = response.error.message;
+                                }
+                            } catch (e) {
+                                // If parsing fails, use the default error message
+                            }
+
+                            // Render the error message
+                            $('#presentation-error').text(errorMessage);
+                            $('#presentation-error-area').show();
+                        }
+                    });
+                }
+
+                // Generate QR Code
+                function renderQRCode(url, flowType) {
+                    // Clear previous QR code
+                    const container = document.getElementById(`${flowType}-qr-code`);
+                    container.innerHTML = '';
+
+                    // Create a new QR code
+                    var qrcode = new QRCode(container, {
+                        text: url,
+                        width: 170,
+                        height: 170,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+
+                    // Show the QR code container
+                    $(`#${flowType}-qr-code-container`).show();
+
+                    // Show the QR code area
+                    $(`#${flowType}-qr-area`).show();
+                }
+
+                // Start status checking
+                function startStatusCheck(type) {
+                    clearStatusCheck();
+
+                    statusCheckInterval = setInterval(function () {
+                        CheckStatus(type);
+                    }, 2000); // Check every 2 seconds
+                }
+
+                // Check Status
+                function CheckStatus(type) {
+                    const state = $('#currentState').val();
+
+                    if (!state) {
+                        return;
+                    }
+
+                    $.ajax({
+                        url: ENDPOINTS.STATUS,
+                        type: 'POST',
+                        data: JSON.stringify({ state: state }),
+                        contentType: 'application/json',
+                        success: function (response) {
+
+                            console.log('Status check response:', response);
+
+                            // Update progress based on status
+                            let progress = 0;
+                            let message = '';
+                            switch (response.status) {
+                                case 'request_created':
+                                    progress = 35;
+                                    message = MESSAGES.REQUEST_CREATED;
+
+                                    break;
+                                case 'request_retrieved':
+                                    progress = 60;
+
+                                    if (type === 'issuance') {
+                                        message = MESSAGES.REQUEST_RETRIEVED_ISSUANCE;
+
+                                        // Hide the issuance QR code container
+                                        $('#issuance-qr-area').hide();
+                                    } else {
+                                        message = MESSAGES.REQUEST_RETRIEVED_PRESENTATION;
+
+                                        // Hide the presentation QR code container
+                                        $('#presentation-qr-area').hide();
                                     }
-                                });
+
+                                    break;
+
+                                case 'issuance_successful':
+                                    progress = 100;
+                                    message = MESSAGES.ISSUANCE_SUCCESSFUL;
+
+                                    // Hide the issuance PIN code container
+                                    $('#issuance-pin-area').hide();
+
+                                    break;
+
+                                case 'presentation_verified':
+                                    progress = 100;
+                                    message = 'Your credentials have been successfully verified.';
+
+                                    // Hide the presentation QR code container
+                                    $('#presentation-qr-area').hide();
+
+                                    // Check if the response contains claims
+                                    if (response.claims) {
+                                        // Show the claims
+                                        $('#presentation-claims-area').show();
+                                        $('#presentation-claims-list').empty();
+
+                                        // First take the claims string and parse it
+                                        const claims = JSON.parse(response.claims);
+
+                                        // This is the format of the claims, however we can't use the attributes name directly
+                                        //{displayName: 'Yoel Horvitz', photo: ''}
+
+                                        Object.entries(claims).forEach(([key, value]) => {
+
+                                            // Hide empty values
+                                            if (value) {
+                                                $('#presentation-claims-list').append(`<li>${key}: ${value}</li>`);
+                                            }
+                                        });
+                                    }
+
+                                    break;
                             }
-                            
-                            break;
-                    }
 
 
-                    updateProgress(type, progress, message);
+                            updateProgress(type, progress, message);
 
-                    // Stop checking if completed
-                    if (progress >= 100 || response.status === 'completed') {
-                        clearStatusCheck();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Status check error:', error);
+                            // Stop checking if completed
+                            if (progress >= 100 || response.status === 'completed') {
+                                clearStatusCheck();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Status check error:', error);
+                        }
+                    });
                 }
-            });
-        }
 
-        // Update progress circle
-        function updateProgress(type, progress, message) {
-            const progressElement = $(`#${type}Progress`);
-            const innerElement = progressElement.find('.progress-circle-inner');
+                // Update progress circle
+                function updateProgress(flowType, progress, message) {
+                    const progressElement = $(`#${flowType}-progress-circle`);
+                    const innerElement = progressElement.find('.progress-circle-inner');
 
-            // Update text
-            innerElement.text(Math.round(progress) + '%');
+                    // Update text
+                    innerElement.text(Math.round(progress) + '%');
 
-            // Update circle progress
-            const degrees = (progress / 100) * 360;
-            progressElement.css('background',
-                `conic-gradient(#198754 ${degrees}deg, #e9ecef ${degrees}deg)`
-            );
+                    // Update circle progress
+                    const degrees = (progress / 100) * 360;
+                    progressElement.css('background',
+                        `conic-gradient(#198754 ${degrees}deg, #ced4db ${degrees}deg)`
+                    );
 
-            // Update status text
-            $(`#${type}StatusText`).text(message);
-        }
+                    // Update status text
+                    $(`#${flowType}-status-message`).text(message);
+                }
 
-        // Clear status checking
-        function clearStatusCheck() {
-            if (statusCheckInterval) {
-                clearInterval(statusCheckInterval);
-                statusCheckInterval = null;
-            }
-        }
 
-        // Initialize the application
-        $(document).ready(function () {
-            showHomePage();
-        });
-    </script>
+                // Clear status checking
+                function clearStatusCheck() {
+                    if (statusCheckInterval) {
+                        clearInterval(statusCheckInterval);
+                        statusCheckInterval = null;
+                    }
+                }
+
+                // Initialize the application
+                $(document).ready(function () {
+                    main_ShowSection();
+                });
+            </script>
 </body>
 
 </html>
