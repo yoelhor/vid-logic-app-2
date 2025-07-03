@@ -112,7 +112,7 @@
             font-size: 0.8rem;
         }
 
-        .notification-area {
+        .notification-container {
             background-color: #eceff1;
             padding: 10px;
             border-radius: 8px;
@@ -151,14 +151,14 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#" onclick="main_ShowSection()">
+                    <a class="navbar-brand" href="#" onclick="main_showSection()">
                         <i class="fas fa-shield-alt me-2"></i>Verified ID Sample
                     </a>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link" href="#" onclick="issuance_ShowSection()">
+                        <a class="nav-link" href="#" onclick="issuance_showSection()">
                             <i class="fas fa-plus-circle me-1"></i>Obtain Credential
                         </a>
-                        <a class="nav-link" href="#" onclick="presentation_ShowSection()">
+                        <a class="nav-link" href="#" onclick="presentation_showSection()">
                             <i class="fas fa-id-card me-1"></i>Present Credentials
                         </a>
                         <a class="nav-link" href="https://github.com/yoelhor/vid-logic-app-2" target="_blank">
@@ -183,14 +183,14 @@
                 <div class="col-md-10">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <div class="main-option-card p-4" onclick="issuance_ShowSection()">
+                            <div class="main-option-card p-4" onclick="issuance_showSection()">
                                 <i class="fas fa-plus-circle text-primary mb-3" style="font-size: 3rem;"></i>
                                 <h4 class="text-center">Obtain Credential</h4>
                                 <p class="text-center text-muted">Request and receive a new verified ID credential</p>
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <div class="main-option-card p-4" onclick="presentation_ShowSection()">
+                            <div class="main-option-card p-4" onclick="presentation_showSection()">
                                 <i class="fas fa-id-card text-primary mb-3" style="font-size: 3rem;"></i>
                                 <h4 class="text-center">Present Credentials</h4>
                                 <p class="text-center text-muted">Share your verified credentials</p>
@@ -207,11 +207,11 @@
                         <div class="main-card p-4">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h3><i class="fas fa-plus-circle text-primary me-2"></i>Obtain Credential</h3>
-                                <button type="button" class="btn-close" onclick="main_ShowSection()"></button>
+                                <button type="button" class="btn-close" onclick="main_showSection()"></button>
                             </div>
 
                             <!-- Issuance Content Area -->
-                            <div id="issuance-content-area">
+                            <div id="issuance-content-container">
                                 <div class="mb-3">
                                     <label for="issuance-display-name" class="form-label">Display Name</label>
                                     <input type="text" class="form-control" id="issuance-display-name"
@@ -227,24 +227,25 @@
                             </div>
 
                             <!-- QR Code Area -->
-                            <div id="issuance-qr-area" class="issuance-qr-container" style="display: none;">
+                            <div id="issuance-qr-container" class="issuance-qr-container" style="display: none;">
                                 <p>Scan QR Code with your mobile device</p>
                                 <div id="issuance-qr-code"></div>
                             </div>
 
                             <!-- PIN Code Area -->
-                            <div id="issuance-pin-area" style="display: none;">
+                            <div id="issuance-pin-container" style="display: none;">
                             </div>
 
                             <!-- Issuance Error Area -->
-                            <div id="issuance-error-area" class="alert alert-danger" role="alert"
+                            <div id="issuance-error-container" class="alert alert-danger" role="alert"
                                 style="display: none;">
                                 <i class="bi bi-exclamation-triangle"></i>
                                 <span id="issuance-error"></span>
                             </div>
 
                             <!-- Issuance Notification Area -->
-                            <div id="issuance-notification-area" class="notification-area" style="display: none;">
+                            <div id="issuance-notification-container" class="notification-container"
+                                style="display: none;">
                                 <div class="d-flex align-items-center">
                                     <div class="progress-circle" id="issuance-progress-circle">
                                         <div class="progress-circle-inner">0%</div>
@@ -272,18 +273,18 @@
                         <div class="main-card p-4">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h3><i class="fas fa-plus-circle text-primary me-2"></i>Present Credentials</h3>
-                                <button type="button" class="btn-close" onclick="main_ShowSection()"></button>
+                                <button type="button" class="btn-close" onclick="main_showSection()"></button>
                             </div>
 
                             <!-- presentation Content Area -->
-                            <div id="presentation-content-area">
+                            <div id="presentation-content-container">
                                 <p class="mb-3">Ready to share your verified ID credentials with us? To present your
                                     credentials, please click the button below to start the
                                     process.</p>
                             </div>
 
                             <!-- presentation Claims Area -->
-                            <div id="presentation-claims-area" class="mt-4" style="display: none;">
+                            <div id="presentation-claims-container" class="mt-4" style="display: none;">
                                 <h4>Your Claims</h4>
                                 <ul id="presentation-claims-list" class="list-unstyled">
 
@@ -291,20 +292,22 @@
                             </div>
 
                             <!-- QR Code Area -->
-                            <div id="presentation-qr-area" class="presentation-qr-container" style="display: none;">
+                            <div id="presentation-qr-container" class="presentation-qr-container"
+                                style="display: none;">
                                 <p>Scan QR Code with your mobile device</p>
                                 <div id="presentation-qr-code"></div>
                             </div>
 
                             <!-- presentation Error Area -->
-                            <div id="presentation-error-area" class="alert alert-danger" role="alert"
+                            <div id="presentation-error-container" class="alert alert-danger" role="alert"
                                 style="display: none;">
                                 <i class="bi bi-exclamation-triangle"></i>
                                 <span id="presentation-error"></span>
                             </div>
 
                             <!-- presentation Notification Area -->
-                            <div id="presentation-notification-area" class="notification-area" style="display: none;">
+                            <div id="presentation-notification-container" class="notification-container"
+                                style="display: none;">
                                 <div class="d-flex align-items-center">
                                     <div class="progress-circle" id="presentation-progress-circle">
                                         <div class="progress-circle-inner">0%</div>
@@ -356,27 +359,27 @@
                 };
 
                 // Navigation functions
-                function main_ShowSection() {
+                function main_showSection() {
                     // Navigate to the main section
                     $('#main-section').show();
                     $('#issuance-section').hide();
                     $('#presentation-section').hide();
 
                     // Reset the status check interval
-                    clearStatusCheck();
+                    status_clearInterval();
                 }
 
-                function issuance_ShowSection() {
+                function issuance_showSection() {
                     // Navigate to the issuance section
                     $('#main-section').hide();
                     $('#issuance-section').show();
                     $('#presentation-section').hide();
 
                     // Show and hide relevant areas within the issuance section
-                    $('#issuance-notification-area').hide();
-                    $('#issuance-error-area').hide();
-                    $('#issuance-qr-area').hide();
-                    $('#issuance-content-area').show();
+                    $('#issuance-notification-container').hide();
+                    $('#issuance-error-container').hide();
+                    $('#issuance-qr-container').hide();
+                    $('#issuance-content-container').show();
                     $('#issuance-submit-btn').show();
 
                     // Reset the issuance data
@@ -386,21 +389,21 @@
                     $('#issuance-photo-preview-container').empty();
 
                     // Reset the status check interval
-                    clearStatusCheck();
+                    status_clearInterval();
                 }
 
-                function presentation_ShowSection() {
+                function presentation_showSection() {
                     // Navigate to the presentation section
                     $('#main-section').hide();
                     $('#issuance-section').hide();
                     $('#presentation-section').show();
 
                     // Show and hide relevant areas within the presentation section
-                    $('#presentation-notification-area').hide();
-                    $('#presentation-error-area').hide();
-                    $('#presentation-qr-area').hide();
-                    $('#presentation-claims-area').hide();
-                    $('#presentation-content-area').show();
+                    $('#presentation-notification-container').hide();
+                    $('#presentation-error-container').hide();
+                    $('#presentation-qr-container').hide();
+                    $('#presentation-claims-container').hide();
+                    $('#presentation-content-container').show();
                     $('#presentation-submit-btn').show();
 
                     // Reset the presentation data
@@ -408,24 +411,10 @@
                     $('#presentation-claims-list').empty();
 
                     // Reset the status check interval
-                    clearStatusCheck();
+                    status_clearInterval();
                 }
 
-                // Function to generate a GUID
-                function generateGUID() {
-                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                        const r = Math.random() * 16 | 0;
-                        const v = c == 'x' ? r : (r & 0x3 | 0x8);
-                        return v.toString(16);
-                    });
-                }
 
-                // Function to generate a random PIN code between 1336 and 9984
-                function generatePINCode() {
-                    const min = 1336;
-                    const max = 9984;
-                    return Math.floor(Math.random() * (max - min + 1)) + min;
-                }
 
                 // Photo preview functionality
                 $('#issuance-photo-upload').on('change', function (e) {
@@ -446,21 +435,21 @@
                     const displayName = $('#issuance-display-name').val();
 
                     // Hide any previous errors
-                    $('#issuance-error-area').hide();
+                    $('#issuance-error-container').hide();
 
                     // Validate display name
                     if (!displayName.trim()) {
                         // Render the error message
                         $('#issuance-error').text('Please enter a display name');
-                        $('#issuance-error-area').show();
+                        $('#issuance-error-container').show();
                         return;
                     }
 
                     // Show the notification area
-                    $('#issuance-notification-area').show();
+                    $('#issuance-notification-container').show();
 
                     // Hide the issuance form area
-                    $('#issuance-content-area').hide();
+                    $('#issuance-content-container').hide();
 
                     // Hide the issuance submit button
                     $('#issuance-submit-btn').hide();
@@ -481,7 +470,7 @@
                     $('#currentState').val(payload.state);
 
                     // Update the progress and status text
-                    updateProgress("issuance", 10, 'Processing...');
+                    status_updateProgress("issuance", 10, 'Processing...');
 
                     // Start the issuance flow
                     $.ajax({
@@ -493,17 +482,17 @@
                             console.log('Issuance flow started:', response);
 
                             // Update the progress and status text
-                            updateProgress("issuance", 35, MESSAGES.REQUEST_CREATED);
+                            status_updateProgress("issuance", 35, MESSAGES.REQUEST_CREATED);
 
                             // Render the PIN code
-                            $('#issuance-pin-area').html('<div class="pin-code">PIN code: ' + payload.pin + '</div>');
-                            $('#issuance-pin-area').show();
+                            $('#issuance-pin-container').html('<div class="pin-code">PIN code: ' + payload.pin + '</div>');
+                            $('#issuance-pin-container').show();
 
                             // Render the QR code
                             renderQRCode(response.url, 'issuance');
 
                             // Start checking the status
-                            startStatusCheck('issuance');
+                            status_setInterval('issuance');
                         },
                         error: function (xhr, status, error) {
                             console.error('Issuance flow error:', xhr.responseText);
@@ -520,7 +509,7 @@
 
                             // Render the error message
                             $('#issuance-error').text(errorMessage);
-                            $('#issuance-error-area').show();
+                            $('#issuance-error-container').show();
                         }
                     });
                 }
@@ -538,19 +527,19 @@
                     $('#currentState').val(payload.state);
 
                     // Hide any previous errors
-                    $('#presentation-error-area').hide();
+                    $('#presentation-error-container').hide();
 
                     // Hide the presentation content area
-                    $('#presentation-content-area').hide();
+                    $('#presentation-content-container').hide();
 
                     // Hide the presentation submit button
                     $('#presentation-submit-btn').hide();
 
                     // Show the notification area
-                    $('#presentation-notification-area').show();
+                    $('#presentation-notification-container').show();
 
                     // Update the progress and status text
-                    updateProgress("presentation", 10, 'Processing...');
+                    status_updateProgress("presentation", 10, 'Processing...');
 
                     $.ajax({
                         url: ENDPOINTS.PRESENTATION,
@@ -562,14 +551,14 @@
                             console.log('Presentation flow started:', response);
 
                             // Update the progress and status text
-                            updateProgress("presentation", 35, MESSAGES.REQUEST_CREATED);
+                            status_updateProgress("presentation", 35, MESSAGES.REQUEST_CREATED);
 
                             // Render the QR code
                             $('#presentationQRContainer').show();
                             renderQRCode(response.url, 'presentation');
 
                             // Start checking the status
-                            startStatusCheck('presentation');
+                            status_setInterval('presentation');
                         },
                         error: function (xhr, status, error) {
                             console.error('Issuance flow error:', xhr.responseText);
@@ -586,45 +575,23 @@
 
                             // Render the error message
                             $('#presentation-error').text(errorMessage);
-                            $('#presentation-error-area').show();
+                            $('#presentation-error-container').show();
                         }
                     });
                 }
 
-                // Generate QR Code
-                function renderQRCode(url, flowType) {
-                    // Clear previous QR code
-                    const container = document.getElementById(`${flowType}-qr-code`);
-                    container.innerHTML = '';
-
-                    // Create a new QR code
-                    var qrcode = new QRCode(container, {
-                        text: url,
-                        width: 170,
-                        height: 170,
-                        colorDark: "#000000",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-
-                    // Show the QR code container
-                    $(`#${flowType}-qr-code-container`).show();
-
-                    // Show the QR code area
-                    $(`#${flowType}-qr-area`).show();
-                }
 
                 // Start status checking
-                function startStatusCheck(type) {
-                    clearStatusCheck();
+                function status_setInterval(type) {
+                    status_clearInterval();
 
                     statusCheckInterval = setInterval(function () {
-                        CheckStatus(type);
+                        status_check(type);
                     }, 2000); // Check every 2 seconds
                 }
 
                 // Check Status
-                function CheckStatus(type) {
+                function status_check(type) {
                     const state = $('#currentState').val();
 
                     if (!state) {
@@ -656,12 +623,12 @@
                                         message = MESSAGES.REQUEST_RETRIEVED_ISSUANCE;
 
                                         // Hide the issuance QR code container
-                                        $('#issuance-qr-area').hide();
+                                        $('#issuance-qr-container').hide();
                                     } else {
                                         message = MESSAGES.REQUEST_RETRIEVED_PRESENTATION;
 
                                         // Hide the presentation QR code container
-                                        $('#presentation-qr-area').hide();
+                                        $('#presentation-qr-container').hide();
                                     }
 
                                     break;
@@ -671,7 +638,7 @@
                                     message = MESSAGES.ISSUANCE_SUCCESSFUL;
 
                                     // Hide the issuance PIN code container
-                                    $('#issuance-pin-area').hide();
+                                    $('#issuance-pin-container').hide();
 
                                     break;
 
@@ -680,12 +647,12 @@
                                     message = 'Your credentials have been successfully verified.';
 
                                     // Hide the presentation QR code container
-                                    $('#presentation-qr-area').hide();
+                                    $('#presentation-qr-container').hide();
 
                                     // Check if the response contains claims
                                     if (response.claims) {
                                         // Show the claims
-                                        $('#presentation-claims-area').show();
+                                        $('#presentation-claims-container').show();
                                         $('#presentation-claims-list').empty();
 
                                         // First take the claims string and parse it
@@ -707,11 +674,11 @@
                             }
 
 
-                            updateProgress(type, progress, message);
+                            status_updateProgress(type, progress, message);
 
                             // Stop checking if completed
                             if (progress >= 100 || response.status === 'completed') {
-                                clearStatusCheck();
+                                status_clearInterval();
                             }
                         },
                         error: function (xhr, status, error) {
@@ -721,7 +688,7 @@
                 }
 
                 // Update progress circle
-                function updateProgress(flowType, progress, message) {
+                function status_updateProgress(flowType, progress, message) {
                     const progressElement = $(`#${flowType}-progress-circle`);
                     const innerElement = progressElement.find('.progress-circle-inner');
 
@@ -740,16 +707,56 @@
 
 
                 // Clear status checking
-                function clearStatusCheck() {
+                function status_clearInterval() {
                     if (statusCheckInterval) {
                         clearInterval(statusCheckInterval);
                         statusCheckInterval = null;
                     }
                 }
 
+                // Function to generate a GUID
+                function generateGUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        const r = Math.random() * 16 | 0;
+                        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
+                // Function to generate a random PIN code between 1336 and 9984
+                function generatePINCode() {
+                    const min = 1336;
+                    const max = 9984;
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                // Generate QR Code
+                function renderQRCode(url, flowType) {
+                    // Clear previous QR code
+                    const container = document.getElementById(`${flowType}-qr-code`);
+                    container.innerHTML = '';
+
+                    // Create a new QR code
+                    var qrcode = new QRCode(container, {
+                        text: url,
+                        width: 170,
+                        height: 170,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+
+                    // Show the QR code container
+                    $(`#${flowType}-qr-code-container`).show();
+
+                    // Show the QR code area
+                    $(`#${flowType}-qr-container`).show();
+                }
+
+
                 // Initialize the application
                 $(document).ready(function () {
-                    main_ShowSection();
+                    main_showSection();
                 });
             </script>
 </body>
