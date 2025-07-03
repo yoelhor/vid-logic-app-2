@@ -353,6 +353,7 @@
                     REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device.',
                     ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device.',
                     PRESENTATION_VERIFIED: 'Your credentials have been successfully verified.',
+                    PROSSESSING: 'Processing your request, please wait...',
                     ERROR_GENERIC: 'An error occurred. Please try again.',
                     ERROR_DISPLAY_NAME: 'Please enter a display name',
                     ERROR_PHOTO: 'Please select a photo'
@@ -440,7 +441,7 @@
                     // Validate display name
                     if (!displayName.trim()) {
                         // Render the error message
-                        $('#issuance-error').text('Please enter a display name');
+                        $('#issuance-error').text(MESSAGES.ERROR_DISPLAY_NAME);
                         $('#issuance-error-container').show();
                         return;
                     }
@@ -470,7 +471,7 @@
                     $('#currentState').val(payload.state);
 
                     // Update the progress and status text
-                    status_updateProgress("issuance", 10, 'Processing...');
+                    status_updateProgress("issuance", 10, MESSAGES.PROSSESSING);
 
                     // Start the issuance flow
                     $.ajax({
@@ -539,7 +540,7 @@
                     $('#presentation-notification-container').show();
 
                     // Update the progress and status text
-                    status_updateProgress("presentation", 10, 'Processing...');
+                    status_updateProgress("presentation", 10, MESSAGES.PROSSESSING);
 
                     $.ajax({
                         url: ENDPOINTS.PRESENTATION,
@@ -644,7 +645,7 @@
 
                                 case 'presentation_verified':
                                     progress = 100;
-                                    message = 'Your credentials have been successfully verified.';
+                                    message = MESSAGES.PRESENTATION_VERIFIED;
 
                                     // Hide the presentation QR code container
                                     $('#presentation-qr-container').hide();
