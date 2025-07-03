@@ -353,7 +353,7 @@
                     REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device.',
                     ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device.',
                     PRESENTATION_VERIFIED: 'Your credentials have been successfully verified.',
-                    PROSSESSING: 'Processing your request, please wait...',
+                    PROCESSING: 'Processing your request, please wait...',
                     ERROR_GENERIC: 'An error occurred. Please try again.',
                     ERROR_DISPLAY_NAME: 'Please enter a display name',
                     ERROR_PHOTO: 'Please select a photo'
@@ -471,7 +471,7 @@
                     $('#currentState').val(payload.state);
 
                     // Update the progress and status text
-                    status_updateProgress("issuance", 10, MESSAGES.PROSSESSING);
+                    status_updateProgress("issuance", 10, MESSAGES.PROCESSING);
 
                     // Start the issuance flow
                     $.ajax({
@@ -540,7 +540,7 @@
                     $('#presentation-notification-container').show();
 
                     // Update the progress and status text
-                    status_updateProgress("presentation", 10, MESSAGES.PROSSESSING);
+                    status_updateProgress("presentation", 10, MESSAGES.PROCESSING);
 
                     $.ajax({
                         url: ENDPOINTS.PRESENTATION,
