@@ -1,0 +1,28 @@
+{
+    "AcceptedIssuers": {
+        "type": "Array",
+        "value": [
+            ""
+        ]
+    },
+    "ApiKey": {
+        "type": "String",
+        "value": ""
+    },
+    "CallbackUrl": {
+        "type": "String",
+        "value": ""
+    },
+    "DidAuthority": {
+        "type": "String",
+        "value": ""
+    },
+    "Manifest": {
+        "type": "String",
+        "value": ""
+    },
+    "StorageAccountName": {
+        "type": "String",
+        "value": ""
+    }
+}

@@ -11,8 +11,7 @@
                         "authority": "@{parameters('DidAuthority')}",
                         "includeQRCode": false,
                         "registration": {
-                            "clientName": "Woodgrove helpdesk",
-                            "purpose": "Prove your identity"
+                            "clientName": "My sample app"
                         },
                         "callback": {
                             "url": "@{parameters('CallbackUrl')}",
@@ -23,7 +22,7 @@
                         },
                         "includeReceipt": false,
                         "type": "VerifiedCredentialExpert",
-                        "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/8d1979f0-9a8a-4859-af8a-cd35d8d7c46a/verifiableCredentials/contracts/33cb8eda-ebc4-00e3-ad9f-87e1c619edf9/manifest",
+                        "manifest": "@{parameters('Manifest')}",
                         "pin": {
                             "value": "@{triggerBody()?['pin']}",
                             "length": 4

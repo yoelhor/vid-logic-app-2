@@ -1,6 +1,7 @@
 # Instructions for the GitHub Copilot
 
-Create a single page application within the index.html file, titled "Verified ID Sample." The application's design should reflect a professional helpdesk user interface, utilising a simple grayscale palette inspired by Bootstrap. Buttons and other UI elements are to retain Bootstrap’s default color scheme (use the primary color). For the JavaScript framework, implement jQuery.
+Create a single page application within the index.html file, titled "Verified ID Sample." The application's design should reflect a professional helpdesk user interface, utilising a simple grayscale palette inspired by Bootstrap. Buttons and other UI elements are to retain Bootstrap’s default color scheme (use the primary color). For the JavaScript framework, implement jQuery. All JavaScritp code should use JQuery.
+
 Include a dark header section featuring navigation links for "Obtain Credential" and "Preset Credentials." Additionally, provide a link to the GitHub repository at https://github.com/yoelhor/vid-logic-app-2 (accompanied by the GitHub icon), and a privacy policy link at https://github.com/yoelhor/vid-logic-app-2/privacy (with an appropriate icon).
 The application has three key scenarios: “main” (home page), “issuance”, and “presentation”. All HTML element IDs, comments, and JavaScript functions must begin with “main”, “issuance”, or “presentation”. All three sections should be centered and cover the entire screen (except the header).
 
@@ -34,6 +35,7 @@ Upon successful completion, check the “status” attribute and the type of the
 - presentation_verified set the progress to 100%, the message to “Your credentials have been successfully verified”. Next, validate the “claims” attribute, then render all attributes as key-value pairs, omitting any keys with empty values.
 
 ## General
+
 Use constants for all messages and the three endpoint URLs in the JavaScript and place them at the top of the JavaScript section.
 Use the index.html file for both HTML, CSS and JavaScript code
 
