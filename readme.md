@@ -184,7 +184,7 @@ In this step, add the required “parameters” for the workflows in the logic a
 
 1. Open the Logic App you created.
 1. From the menu, select **parameters**.
-1. Copy the content of the [parameters.josn](./Azure-Logic-app/parameters.json) file and add it to the editor.
+1. Copy the content of the [parameters.josn](./Azure-Logic-app/Parameters.json) file and add it to the editor.
 1. Edit the following:
     1. **DidAuthority** the authority that uniquely identifies your verified id environment.
     1. **Manifest** the verified ID credential manifest URL.
