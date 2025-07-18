@@ -109,7 +109,8 @@
                 "type": "Compose",
                 "inputs": {
                     "status": "request_created",
-                    "url": "@{body('Parse_verified_ID_JSON_response')?['url']}"
+                    "url": "@{body('Parse_verified_ID_JSON_response')?['url']}",
+                    "demo": "Training"
                 },
                 "runAfter": {
                     "Parse_verified_ID_JSON_response": [
@@ -127,7 +128,7 @@
                     },
                     "method": "put",
                     "body": "@outputs('Compose_state_JSON')",
-                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('StorageAccountName')))}/tables/@{encodeURIComponent('VerifiedIdState')}/entities(PartitionKey='@{encodeURIComponent('Training')}',RowKey='@{encodeURIComponent(triggerBody()?['state'])}')"
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('StorageAccountName')))}/tables/@{encodeURIComponent('VerifiedIdState')}/entities(PartitionKey='@{encodeURIComponent('key')}',RowKey='@{encodeURIComponent(triggerBody()?['state'])}')"
                 },
                 "runAfter": {
                     "Compose_state_JSON": [
@@ -207,5 +208,21 @@
         }
     },
     "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "azuretables": {
+                    "id": "",
+                    "connectionId": "",
+                    "connectionName": "azuretables",
+                    "connectionProperties": {
+                        "authentication": {
+                            "type": "ManagedServiceIdentity",
+                            "identity": ""
+                        }
+                    }
+                }
+            }
+        }
     }
 }

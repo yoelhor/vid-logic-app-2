@@ -98,9 +98,10 @@
 
         .progress-circle {
             width: 50px;
+            min-width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: conic-gradient(#198754 0deg, #e9ecef 0deg);
+            background: conic-gradient(var(--bs-primary) 0deg, #e9ecef 0deg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -109,6 +110,7 @@
 
         .progress-circle-inner {
             width: 40px;
+            min-width: 40px;
             height: 40px;
             border-radius: 50%;
             background: white;
@@ -140,7 +142,7 @@
         .issuance-pin-code {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #0d6efd;
+            color: var(--bs-primary);
             margin-top: 15px;
             text-align: center;
         }
@@ -320,6 +322,10 @@
             <div class="school-header">
                 <h1><i class="fas fa-certificate text-secondary me-2"></i>Receive Your Credential</h1>
                 <p class="text-muted">Complete your course certification</p>
+
+                <button type="button" class="btn btn-outline-secondary" id="main-back-button2">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Courses
+                </button>
             </div>
 
             <!-- Issuance Content Area -->
@@ -389,7 +395,8 @@
             PROCESSING: 'Processing your request, please wait...',
             ERROR_GENERIC: 'An error occurred. Please try again.',
             ERROR_DISPLAY_NAME: 'Please enter a display name',
-            ERROR_PHOTO: 'Please select a photo'
+            ERROR_PHOTO: 'Please select a photo',
+            ERROR_PINCODE: 'You may have entered an incorrect PIN code, please try again'
         };
 
         // Global variables
@@ -462,11 +469,13 @@
         });
 
         $('#main-back-button').on('click', function () {
-            $('#main-course-list').removeClass('hidden');
-            $('#main-course-detail').addClass('hidden');
-            $('.course-card').removeClass('active');
+            main_showSection()
         });
 
+        $('#main-back-button2').on('click', function () {
+            main_showSection()
+        });
+        
         $('#main-receive-credit-button').on('click', function () {
             issuance_showSection();
         });
@@ -608,6 +617,24 @@
                                 $('#issuance-pin-container').hide();
                                 clearInterval(issuanceStatusCheckInterval);
                                 break;
+                            case 'issuance_error':
+                                progress = 0;
+                                message = response.error || MESSAGES.ERROR_GENERIC;
+
+                                // If error contains 'badOrMissingField', it usually means that the PIN was not entered correctly
+                                if (message.includes('badOrMissingField')) {
+                                    message = MESSAGES.ERROR_PINCODE;
+                                }
+
+
+                                // Hide the issuance-notification-container
+                                $('#issuance-notification-container').hide();
+                                $('#issuance-qr-container').hide();
+
+                                $('#issuance-error').text(message);
+                                $('#issuance-error-container').show();
+                                clearInterval(issuanceStatusCheckInterval);
+                                break;
                         }
 
                         issuance_updateProgress(progress, message);
@@ -644,7 +671,7 @@
             // Update circle progress
             const degrees = (progress / 100) * 360;
             progressElement.css('background',
-                `conic-gradient(#198754 ${degrees}deg, #e9ecef ${degrees}deg)`
+                `conic-gradient(var(--bs-primary) ${degrees}deg, #e9ecef ${degrees}deg)`
             );
 
             // Update status message
