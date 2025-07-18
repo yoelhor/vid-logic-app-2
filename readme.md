@@ -673,7 +673,7 @@ The final workflow checks the state session status, reads the state cache, and r
 
     1. Select the **Settings** tab and enable **Schema validation**.
 
-1. Next add an action type of **Get entity**:
+1. Next add an action type of **Get entity (V2)**:
     1. Change the **Name** to `Get state entity`.
     1. Partition **Key**, enter: `key`. Please ensure that the key is entered exactly as provided, paying attention to case sensitivity. It should be in all lowercase letters.
     1. For the **Raw**, enter: `@{triggerBody()?['state']}`
