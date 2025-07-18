@@ -133,6 +133,19 @@
             margin: 20px 0;
         }
 
+        #issuance-pin-container {
+            margin: 0;
+            height: 1px;
+            max-height: 1px;
+            visibility: hidden;
+        }
+
+        #issuance-qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .issuance-photo-preview {
             max-width: 200px;
             max-height: 200px;
@@ -395,7 +408,7 @@
 
         const MESSAGES = {
             REQUEST_CREATED: 'Please scan the QR code with your mobile device',
-            REQUEST_RETRIEVED_ISSUANCE: 'Please enter the PIN code on your mobile device',
+            REQUEST_RETRIEVED_ISSUANCE: 'Please select next on your Microsoft Authenticator app',
             ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device',
             PROCESSING: 'Processing your request, please wait...',
             ERROR_GENERIC: 'An error occurred. Please try again.',
