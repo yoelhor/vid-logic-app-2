@@ -708,31 +708,32 @@
                 // Show QR code container
                 $('#issuance-qr-container').show();
             }
+        }
 
-            function issuance_resetForm() {
-                $('#issuance-display-name').val('');
-                $('#issuance-photo-upload').val('');
-                $('#issuance-photo-preview-container').empty();
-                $('#issuance-error-container').hide();
-                $('#issuance-notification-container').hide();
-                $('#issuance-qr-container').hide();
-                $('#issuance-pin-container').hide();
-                $('#issuance-content-container').show();
-                $('#issuance-submit-btn').show();
+        function issuance_resetForm() {
+            $('#issuance-display-name').val('');
+            $('#issuance-photo-upload').val('');
+            $('#issuance-photo-preview-container').empty();
+            $('#issuance-error-container').hide();
+            $('#issuance-notification-container').hide();
+            $('#issuance-qr-container').hide();
+            $('#issuance-pin-container').hide();
+            $('#issuance-content-container').show();
+            $('#issuance-submit-btn').show();
 
-                if (issuanceStatusCheckInterval) {
-                    clearInterval(issuanceStatusCheckInterval);
-                    issuanceStatusCheckInterval = null;
-                }
-
-                issuanceCurrentState = '';
+            if (issuanceStatusCheckInterval) {
+                clearInterval(issuanceStatusCheckInterval);
+                issuanceStatusCheckInterval = null;
             }
 
-            // Initialize application
-            $(document).ready(function () {
-                login_showSection();
-                //issuance_showSection();
-            });
+            issuanceCurrentState = '';
+        }
+
+        // Initialize application
+        $(document).ready(function () {
+            login_showSection();
+            //issuance_showSection();
+        });
     </script>
 </body>
 
