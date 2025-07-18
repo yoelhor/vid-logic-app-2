@@ -378,17 +378,14 @@
     <script>
         // Constants
         const ENDPOINTS = {
-            ISSUANCE: 'https://woodgroove.azure-api.net/vid/issuance',
-            PRESENTATION: 'https://woodgroove.azure-api.net/vid/presentation',
-            STATUS: 'https://woodgroove.azure-api.net/vid/status'
+            ISSUANCE: 'https://woodgroove.azure-api.net/training-issue/issue',
+            STATUS: 'https://woodgroove.azure-api.net/global-state/status'
         };
 
         const MESSAGES = {
             REQUEST_CREATED: 'Please scan the QR code with your mobile device',
             REQUEST_RETRIEVED_ISSUANCE: 'Please enter the PIN code on your mobile device',
-            REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device',
             ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device',
-            PRESENTATION_VERIFIED: 'Your credentials have been successfully verified',
             PROCESSING: 'Processing your request, please wait...',
             ERROR_GENERIC: 'An error occurred. Please try again.',
             ERROR_DISPLAY_NAME: 'Please enter a display name',
@@ -611,27 +608,6 @@
                                 $('#issuance-pin-container').hide();
                                 clearInterval(issuanceStatusCheckInterval);
                                 break;
-                            case 'presentation_verified':
-                                progress = 100;
-                                message = MESSAGES.PRESENTATION_VERIFIED;
-
-                                // Handle claims if present
-                                if (response.claims) {
-                                    const claims = JSON.parse(response.claims);
-                                    let claimsHtml = '<div class="mt-3"><h5>Your Claims:</h5><ul>';
-
-                                    Object.entries(claims).forEach(([key, value]) => {
-                                        if (value) {
-                                            claimsHtml += `<li><strong>${key}:</strong> ${value}</li>`;
-                                        }
-                                    });
-
-                                    claimsHtml += '</ul></div>';
-                                    $('#issuance-notification-container').append(claimsHtml);
-                                }
-
-                                clearInterval(issuanceStatusCheckInterval);
-                                break;
                         }
 
                         issuance_updateProgress(progress, message);
@@ -716,6 +692,7 @@
         // Initialize application
         $(document).ready(function () {
             login_showSection();
+            //issuance_showSection();
         });
     </script>
 </body>
