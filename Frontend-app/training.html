@@ -348,6 +348,11 @@
                 <div id="issuance-qr-code"></div>
             </div>
 
+            <!-- URL Area -->
+            <div id="issuance-url-container" class="issuance-url-container" style="display: none;">
+                <a id="issuance-url">Click here to access your credential</a>
+            </div>
+
             <!-- PIN Code Area -->
             <div id="issuance-pin-container" style="display: none;"></div>
 
@@ -475,7 +480,7 @@
         $('#main-back-button2').on('click', function () {
             main_showSection()
         });
-        
+
         $('#main-receive-credit-button').on('click', function () {
             issuance_showSection();
         });
@@ -693,34 +698,41 @@
                 correctLevel: QRCode.CorrectLevel.M
             });
 
-            // Show QR code container
-            $('#issuance-qr-container').show();
-        }
+            // Check if the device is mobile
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                $('#issuance-url-container').show();
 
-        function issuance_resetForm() {
-            $('#issuance-display-name').val('');
-            $('#issuance-photo-upload').val('');
-            $('#issuance-photo-preview-container').empty();
-            $('#issuance-error-container').hide();
-            $('#issuance-notification-container').hide();
-            $('#issuance-qr-container').hide();
-            $('#issuance-pin-container').hide();
-            $('#issuance-content-container').show();
-            $('#issuance-submit-btn').show();
-
-            if (issuanceStatusCheckInterval) {
-                clearInterval(issuanceStatusCheckInterval);
-                issuanceStatusCheckInterval = null;
+                // Set the URL for the link
+                $('#issuance-url').attr('href', url);
+            } else {
+                // Show QR code container
+                $('#issuance-qr-container').show();
             }
 
-            issuanceCurrentState = '';
-        }
+            function issuance_resetForm() {
+                $('#issuance-display-name').val('');
+                $('#issuance-photo-upload').val('');
+                $('#issuance-photo-preview-container').empty();
+                $('#issuance-error-container').hide();
+                $('#issuance-notification-container').hide();
+                $('#issuance-qr-container').hide();
+                $('#issuance-pin-container').hide();
+                $('#issuance-content-container').show();
+                $('#issuance-submit-btn').show();
 
-        // Initialize application
-        $(document).ready(function () {
-            login_showSection();
-            //issuance_showSection();
-        });
+                if (issuanceStatusCheckInterval) {
+                    clearInterval(issuanceStatusCheckInterval);
+                    issuanceStatusCheckInterval = null;
+                }
+
+                issuanceCurrentState = '';
+            }
+
+            // Initialize application
+            $(document).ready(function () {
+                login_showSection();
+                //issuance_showSection();
+            });
     </script>
 </body>
 
