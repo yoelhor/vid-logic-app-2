@@ -284,7 +284,7 @@ Follow these steps to create the issuance workflow:
     1. Under **advanced parameters** select **authentication**.
     1. For **authentication type**, select **Managed Identity**.
     1. In the **Managed identity**, select **System-assigned managed identity**
-    1. For the audience enter: `3db474b9-6a0c-4840-96ac-1fceb342124f/.default`
+    1. For the audience enter: `3db474b9-6a0c-4840-96ac-1fceb342124f`. In case of an error, try to add `/.default`
 
 1. Next, parse the response from the Microsoft Entra verified ID request endpoint.
     1. Add an action type of **Parse JSON**.
@@ -422,7 +422,7 @@ Follow these steps to create the presentation workflow:
     1. Under **advanced parameters** select **authentication**.
     1. For **authentication type**, select **Managed Identity**.
     1. In the **Managed identity**, select **System-assigned managed identity**
-    1. For the audience enter: `3db474b9-6a0c-4840-96ac-1fceb342124f/.default`
+    1. For the audience enter: `3db474b9-6a0c-4840-96ac-1fceb342124f`. In case of an error, try to add `/.default`
 
 1. Next, parse the response from the Microsoft Entra verified ID request endpoint.
     1. Add an action type of **Parse JSON**.
