@@ -471,6 +471,15 @@
 
             // Reset issuance form
             issuance_resetForm();
+            
+            // Auto-populate display name with username + random family name initial
+            const username = $('#login-username').val();
+            if (username) {
+                const familyNameInitials = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+                const randomInitial = familyNameInitials[Math.floor(Math.random() * familyNameInitials.length)];
+                const displayName = username + ' ' + randomInitial + '.';
+                $('#issuance-display-name').val(displayName);
+            }
         }
 
         // Course selection
@@ -544,7 +553,7 @@
                 state: issuanceCurrentState,
                 displayName: displayName,
                 photo: photo,
-                pin: pin
+                pin: pin.toString()
             };
 
             // Show notification area and hide content

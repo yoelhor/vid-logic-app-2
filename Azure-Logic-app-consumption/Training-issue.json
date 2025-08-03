@@ -53,7 +53,7 @@
                             }
                         },
                         "includeReceipt": false,
-                        "type": "CustomerDataHandlingTrainingCertificate",
+                        "type": "PersonalDataHandlingTraining",
                         "manifest": "@{parameters('Manifest')}",
                         "claims": {
                             "displayName": "@{triggerBody()?['displayName']}",
