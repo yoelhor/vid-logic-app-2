@@ -1,6 +1,6 @@
 # Instructions for the GitHub Copilot
 
-Create a single page application within the index.html file, titled "Woodgrove online school." The application's design should reflect a professional online school user interface with just one course "customer data handling", utilizing a simple grayscale palette inspired by Bootstrap. Buttons and other UI elements are to retain Bootstrap’s default color scheme (use the primary color). For the JavaScript framework, implement jQuery. All JavaScript code should use jQuery.
+Create a single page application within the index.html file, titled "Woodgrove online school." The application's design should reflect a professional online school user interface with just one course "Personal Data Handling", utilizing a simple grayscale palette inspired by Bootstrap. Buttons and other UI elements are to retain Bootstrap’s default color scheme (use the primary color). For the JavaScript framework, implement jQuery. All JavaScript code should use jQuery.
 
 The application has three key sections: “login”, “main” (home page), “issuance”. When the a user navigates to the app, it opens the "login" section, upon successfully sign-in, shows the "maim" section, and when a user completes the training shows the "“issuance”" section. All HTML element IDs, comments, and JavaScript functions must begin with “login”, “main” and “issuance”. All three sections should be centered and cover the entire screen.
 
@@ -10,9 +10,9 @@ In the "login" section render a login form with username and password, and a log
 
 ## Main section
 
-In the main page, generated a list of 10 online courses. One of them should be named "customer data handling". User can select the "customer data handling" training and start the course. There is not need to do the selection option for other courses.
+In the main page, generated a list of 10 online courses. One of them should be named "Personal Data Handling". User can select the "Personal Data Handling" training and start the course. There is not need to do the selection option for other courses.
 
-The  "customer data handling" should show a short description and 4 steps to complete the course. At the bottom of the "customer data handling" page, shows the option to "receive credit". This receive credit button will take the user to the “issuance” section. 
+The  "Personal Data Handling" should show a short description and 4 steps to complete the course. At the bottom of the "Personal Data Handling" page, shows the option to "receive credit". This receive credit button will take the user to the “issuance” section. 
 
 ## Issuance section
 
