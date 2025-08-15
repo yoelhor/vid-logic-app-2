@@ -281,6 +281,12 @@
                                 <p class="mb-3">Ready to share your verified ID credentials with us? To present your
                                     credentials, please click the button below to start the
                                     process.</p>
+                                <div class="mb-3">
+                                    <label>
+                                        <input type="checkbox" id="faceCheckRequired" name="faceCheckRequired">
+                                        Face-check required
+                                    </label>
+                                </div>
                             </div>
 
                             <!-- presentation Claims Area -->
@@ -318,6 +324,8 @@
 
                             <!-- presentation Submit Button -->
                             <div class="d-grid">
+                                
+
                                 <button id="presentation-submit-btn" type="button" class="btn btn-primary btn-lg"
                                     onclick="presentation_StartFlow()">
                                     <i class="fas fa-qrcode me-2"></i>Generate QR Code
@@ -343,8 +351,8 @@
                 // Web API endpoints 
                 const ENDPOINTS = {
                     ISSUANCE: 'https://woodgroove.azure-api.net/vid/issuance',
-                    PRESENTATION: 'https://woodgroove.azure-api.net/vid/presentationfordemo',
-                    STATUS: 'https://woodgroove.azure-api.net/vid/status'
+                    PRESENTATION: 'https://woodgroove.azure-api.net/consumption-presentation/presentation',
+                    STATUS: 'https://woodgroove.azure-api.net/global-state/status'
                 };
 
                 const MESSAGES = {
@@ -520,8 +528,10 @@
                 function presentation_StartFlow() {
 
                     // Set a state value for the presentation flow
+                    const faceCheck = $('#faceCheckRequired').is(':checked');
                     const payload = {
-                        state: generateGUID()
+                        state: generateGUID(),
+                        facecheck: faceCheck
                     };
 
                     // Store the current state
