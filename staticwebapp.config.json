@@ -3,7 +3,6 @@
     {
       "route": "/",
       "rewrite": "/training.html",
-      "redirect": "/training.html",
       "statusCode": 302
     }
   ]
