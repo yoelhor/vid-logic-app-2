@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoso Visitor Center</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <style>
+        /* Custom grayscale palette with Bootstrap primary colors for buttons */
+        :root {
+            --bs-gray-100: #f8f9fa;
+            --bs-gray-200: #e9ecef;
+            --bs-gray-300: #dee2e6;
+            --bs-gray-400: #ced4da;
+            --bs-gray-500: #adb5bd;
+            --bs-gray-600: #6c757d;
+            --bs-gray-700: #495057;
+            --bs-gray-800: #343a40;
+            --bs-gray-900: #212529;
+
+            --bs-primary: #2a2550;
+        }
+
+        body {
+            background-color: var(--bs-gray-100);
+            background-image: url('images/ContosoVisitorCenter.jpeg');
+            color: var(--bs-gray-800);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .page-header {
+            background-color: var(--bs-gray-900);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .page-header .nav-link {
+            color: var(--bs-gray-300) !important;
+            transition: color 0.2s;
+        }
+
+        .page-header .nav-link:hover {
+            color: white !important;
+        }
+
+        .page-container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .progress {
+            height: 20px;
+            margin-right: 0.75rem;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress .progress-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .notification-container {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .photo-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+        }
+
+        .pin-code {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+            margin-top: 15px;
+        }
+
+        .main-card {
+            background-color: #191630;
+            border: white 3px solid !important;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 300px;
+            min-height: 400px;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        /* Position the notification area at the bottom of the card */
+        .main-card .notification-container {
+            position: absolute;
+            left: 1.5rem;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            margin-top: 0;
+        }
+
+        .presentation-qr-container {
+            margin-left: 90px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- Page content -->
+    <div class="page-container">
+        <div class="container">
+
+            <!-- Presentation Section -->
+            <div id="presentation-section">
+                <div class="row">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-4">
+                        <div class="main-card p-4">
+
+                            <!-- presentation Content Area -->
+                            <div id="presentation-content-container">
+                                <p class="mb-3">Welcome! Get ready for your visit by tapping the Present Your Visitor
+                                    Pass button below. Don't forget to have your Contoso pass ready.<br>&nbsp;<br></p>
+                            </div>
+
+                            <!-- presentation Claims Area -->
+                            <div id="presentation-claims-container" class="mt-4" style="display: none;">
+                                
+                            </div>
+
+                            <!-- QR Code Area -->
+                            <div id="presentation-qr-container" class="presentation-qr-container"
+                                style="display: none;">
+                                <div id="presentation-qr-code"></div>
+                            </div>
+
+                            <!-- presentation Error Area -->
+                            <div id="presentation-error-container" class="alert alert-danger" role="alert"
+                                style="display: none;">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <span id="presentation-error"></span>
+                            </div>
+
+                            <!-- presentation Notification Area -->
+                            <div id="presentation-notification-container" class="notification-container"
+                                style="display: none;">
+                                <div class="d-flex flex-column">
+                                    <div id="presentation-status-message" class="mt-2"></div><br>
+
+                                    <div class="progress" id="presentation-progress">
+                                        <div id="presentation-progress-bar" class="progress-bar bg-success"
+                                            role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">0%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- presentation Submit Button -->
+                            <div class="d-grid">
+                                <button id="presentation-submit-btn" type="button" class="btn btn-warning btn-lg"
+                                    onclick="presentation_StartFlow()">
+                                    <i class="fas fa-qrcode me-2"></i>Present your Visitor Pass
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden State Field -->
+            <input type="hidden" id="currentState" value="">
+
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+            <script>
+                // Global variables
+                let statusCheckInterval;
+
+                // Web API endpoints 
+                const ENDPOINTS = {
+                    PRESENTATION: 'https://woodgroove.azure-api.net/visitor-pass-present/present',
+                    STATUS: 'https://woodgroove.azure-api.net/global-state/status'
+                };
+
+                const MESSAGES = {
+                    REQUEST_CREATED: 'Please scan the QR code with your mobile device.',
+                    REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device.',
+                    PRESENTATION_VERIFIED: '',
+                    PROCESSING: 'Processing your request, please wait...',
+                    ERROR_GENERIC: 'An error occurred. Please try again.',
+                    ERROR_DISPLAY_NAME: 'Please enter a display name',
+                    ERROR_PHOTO: 'Please select a photo'
+                };
+
+
+                function presentation_showSection() {
+                    // Navigate to the presentation section
+                    $('#presentation-section').show();
+
+                    // Show and hide relevant areas within the presentation section
+                    $('#presentation-notification-container').hide();
+                    $('#presentation-error-container').hide();
+                    $('#presentation-qr-container').hide();
+                    $('#presentation-claims-container').hide();
+                    $('#presentation-content-container').show();
+                    $('#presentation-submit-btn').show();
+
+                    // Reset the presentation data
+                    $('#presentation-status-message').text('');
+                    $('#presentation-claims-list').empty();
+
+                    // Reset the status check interval
+                    status_clearInterval();
+                }
+
+
+                // Start Presentation Flow
+                function presentation_StartFlow() {
+
+                    // Set a state value for the presentation flow
+                    const payload = {
+                        state: generateGUID()
+                    };
+
+                    // Store the current state
+                    $('#currentState').val(payload.state);
+
+                    // Hide any previous errors
+                    $('#presentation-error-container').hide();
+
+                    // Hide the presentation content area
+                    $('#presentation-content-container').hide();
+
+                    // Hide the presentation submit button
+                    $('#presentation-submit-btn').hide();
+
+                    // Show the notification area
+                    $('#presentation-notification-container').show();
+
+                    // Show the progress
+                    $('#presentation-progress').show();
+
+                    // Update the progress and status text
+                    status_updateProgress("presentation", 10, MESSAGES.PROCESSING);
+
+                    $.ajax({
+                        url: ENDPOINTS.PRESENTATION,
+                        type: 'POST',
+                        data: JSON.stringify(payload),
+                        contentType: 'application/json',
+                        success: function (response) {
+
+                            console.log('Presentation flow started:', response);
+
+                            // Update the progress and status text
+                            status_updateProgress("presentation", 35, MESSAGES.REQUEST_CREATED);
+
+                            // Render the QR code
+                            $('#presentationQRContainer').show();
+                            renderQRCode(response.url, 'presentation');
+
+                            // Start checking the status
+                            status_setInterval('presentation');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Presentation flow error:', xhr.responseText);
+                            let errorMessage = 'Error starting presentation flow: ' + error;
+
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.error && response.error.message) {
+                                    errorMessage = response.error.message;
+                                }
+                            } catch (e) {
+                                // If parsing fails, use the default error message
+                            }
+
+                            // Render the error message
+                            $('#presentation-error').text(errorMessage);
+                            $('#presentation-error-container').show();
+                        }
+                    });
+                }
+
+
+                // Start status checking
+                function status_setInterval(type) {
+                    status_clearInterval();
+
+                    statusCheckInterval = setInterval(function () {
+                        status_check(type);
+                    }, 2000); // Check every 2 seconds
+                }
+
+                // Check Status
+                function status_check(type) {
+                    const state = $('#currentState').val();
+
+                    if (!state) {
+                        return;
+                    }
+
+                    $.ajax({
+                        url: ENDPOINTS.STATUS,
+                        type: 'POST',
+                        data: JSON.stringify({ state: state }),
+                        contentType: 'application/json',
+                        success: function (response) {
+
+                            console.log('Status check response:', response);
+
+                            // Update progress based on status
+                            let progress = 0;
+                            let message = '';
+                            switch (response.status) {
+                                case 'request_created':
+                                    progress = 35;
+                                    message = MESSAGES.REQUEST_CREATED;
+
+                                    break;
+                                case 'request_retrieved':
+                                    progress = 60;
+
+                                    message = MESSAGES.REQUEST_RETRIEVED_PRESENTATION;
+
+                                    // Hide the presentation QR code container
+                                    $('#presentation-qr-container').hide();
+
+
+                                    break;
+
+                                case 'presentation_verified':
+                                    progress = 100;
+                                    message = MESSAGES.PRESENTATION_VERIFIED;
+
+                                    // Hide the presentation QR code container
+                                    $('#presentation-qr-container').hide();
+
+                                    // Check if the response contains claims
+                                    if (response.claims) {
+                                        // Show the claims
+                                        $('#presentation-claims-container').show();
+                                        $('#presentation-claims-list').empty();
+
+                                        // First take the claims string and parse it
+                                        const claims = JSON.parse(response.claims);
+
+                                        // This is the format of the claims, however we can't use the attributes name directly
+                                        //{displayName: 'Yoel Horvitz', photo: ''}
+
+                                        // Get the "displayName" claim and welcome the user
+                                        Object.entries(claims).forEach(([key, value]) => {
+                                            // Hide empty values
+                                            if (key === "displayName" && value) {
+                                                $('#presentation-claims-container').html(`Hello, <b>${value}</b>. Your visitor pass is all set, and the door is open. The elevator is just ahead on your right.
+                                                <div><i style="font-size: 4rem !important; margin-top: 50px; margin-left: 150px;" class="fa-solid fa-thumbs-up fs-1 text-warning"></i></div>
+                                                `);
+                                            }
+                                        });
+                                    }
+
+                                    // Hide the progress bar after 2 seconds
+                                    setTimeout(() => {
+                                        $('#presentation-progress').hide();
+                                    }, 2000);
+
+                                    break;
+                            }
+
+
+                            status_updateProgress(type, progress, message);
+
+                            // Stop checking if completed
+                            if (progress >= 100 || response.status === 'completed') {
+                                status_clearInterval();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Status check error:', error);
+                        }
+                    });
+                }
+
+                // Update progress bar
+                function status_updateProgress(flowType, progress, message) {
+                    const bar = $(`#${flowType}-progress-bar`);
+                    const percent = Math.round(progress);
+
+                    // Update bar width, aria value and label
+                    bar.css('width', percent + '%').attr('aria-valuenow', percent).text(percent + '%');
+
+                    // Update status text
+                    $(`#${flowType}-status-message`).text(message);
+                }
+
+
+                // Clear status checking
+                function status_clearInterval() {
+                    if (statusCheckInterval) {
+                        clearInterval(statusCheckInterval);
+                        statusCheckInterval = null;
+                    }
+                }
+
+                // Function to generate a GUID
+                function generateGUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        const r = Math.random() * 16 | 0;
+                        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
+                // Function to generate a random PIN code between 1336 and 9984
+                function generatePINCode() {
+                    const min = 1336;
+                    const max = 9984;
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                // Generate QR Code
+                function renderQRCode(url, flowType) {
+                    // Clear previous QR code
+                    const container = document.getElementById(`${flowType}-qr-code`);
+                    container.innerHTML = '';
+
+                    // Create a new QR code
+                    var qrcode = new QRCode(container, {
+                        text: url,
+                        width: 170,
+                        height: 170,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+
+                    // Show the QR code container
+                    $(`#${flowType}-qr-code-container`).show();
+
+                    // Show the QR code area
+                    $(`#${flowType}-qr-container`).show();
+                }
+
+
+                // Initialize the application
+                $(document).ready(function () {
+                    presentation_showSection();
+                });
+            </script>
+</body>
+
+</html>
