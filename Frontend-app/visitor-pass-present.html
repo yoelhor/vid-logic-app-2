@@ -129,10 +129,6 @@
             bottom: 1.5rem;
             margin-top: 0;
         }
-
-        .presentation-qr-container {
-            margin-left: 90px;
-        }
     </style>
 </head>
 
@@ -158,12 +154,10 @@
 
                             <!-- presentation Claims Area -->
                             <div id="presentation-claims-container" class="mt-4" style="display: none;">
-                                
                             </div>
 
                             <!-- QR Code Area -->
-                            <div id="presentation-qr-container" class="presentation-qr-container"
-                                style="display: none;">
+                            <div id="presentation-qr-container" class="presentation-qr-container d-none justify-content-center">
                                 <div id="presentation-qr-code"></div>
                             </div>
 
@@ -221,7 +215,7 @@
 
                 const MESSAGES = {
                     REQUEST_CREATED: 'Please scan the QR code with your mobile device.',
-                    REQUEST_RETRIEVED_PRESENTATION: 'Please select the credentials to present on your mobile device.',
+                    REQUEST_RETRIEVED_PRESENTATION: "<div class='d-flex align-items-center justify-content-center'><i style='font-size: 4rem !important; margin-bottom: 60px;' class='fa-solid fa-address-card fs-1 text-warning'></i></div>Please select the credentials to present on your mobile device.",
                     PRESENTATION_VERIFIED: '',
                     PROCESSING: 'Processing your request, please wait...',
                     ERROR_GENERIC: 'An error occurred. Please try again.',
@@ -237,7 +231,11 @@
                     // Show and hide relevant areas within the presentation section
                     $('#presentation-notification-container').hide();
                     $('#presentation-error-container').hide();
-                    $('#presentation-qr-container').hide();
+
+                    // Hide the QR code container
+                    $('#presentation-qr-container').addClass('d-none');
+                    $('#presentation-qr-container').removeClass('d-flex');
+
                     $('#presentation-claims-container').hide();
                     $('#presentation-content-container').show();
                     $('#presentation-submit-btn').show();
@@ -293,7 +291,6 @@
                             status_updateProgress("presentation", 35, MESSAGES.REQUEST_CREATED);
 
                             // Render the QR code
-                            $('#presentationQRContainer').show();
                             renderQRCode(response.url, 'presentation');
 
                             // Start checking the status
@@ -361,17 +358,14 @@
                                     message = MESSAGES.REQUEST_RETRIEVED_PRESENTATION;
 
                                     // Hide the presentation QR code container
-                                    $('#presentation-qr-container').hide();
-
+                                    $('#presentation-qr-container').addClass('d-none');
+                                    $('#presentation-qr-container').removeClass('d-flex');
 
                                     break;
 
                                 case 'presentation_verified':
                                     progress = 100;
                                     message = MESSAGES.PRESENTATION_VERIFIED;
-
-                                    // Hide the presentation QR code container
-                                    $('#presentation-qr-container').hide();
 
                                     // Check if the response contains claims
                                     if (response.claims) {
@@ -390,7 +384,7 @@
                                             // Hide empty values
                                             if (key === "displayName" && value) {
                                                 $('#presentation-claims-container').html(`Hello, <b>${value}</b>. Your visitor pass is all set, and the door is open. The elevator is just ahead on your right.
-                                                <div><i style="font-size: 4rem !important; margin-top: 50px; margin-left: 150px;" class="fa-solid fa-thumbs-up fs-1 text-warning"></i></div>
+                                                <div class='d-flex align-items-center justify-content-center'><i style="font-size: 4rem !important; margin-top: 50px;;" class="fa-solid fa-thumbs-up fs-1 text-warning"></i></div>
                                                 `);
                                             }
                                         });
@@ -427,7 +421,7 @@
                     bar.css('width', percent + '%').attr('aria-valuenow', percent).text(percent + '%');
 
                     // Update status text
-                    $(`#${flowType}-status-message`).text(message);
+                    $(`#${flowType}-status-message`).html(message);
                 }
 
 
@@ -457,6 +451,11 @@
 
                 // Generate QR Code
                 function renderQRCode(url, flowType) {
+
+                    // Show the QR code container as a flexbox
+                    $(`#${flowType}-qr-container`).removeClass('d-none');
+                    $(`#${flowType}-qr-container`).addClass('d-flex');
+
                     // Clear previous QR code
                     const container = document.getElementById(`${flowType}-qr-code`);
                     container.innerHTML = '';
