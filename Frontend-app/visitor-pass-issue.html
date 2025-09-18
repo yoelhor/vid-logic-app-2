@@ -356,14 +356,14 @@
     <script>
         // Constants
         const ENDPOINTS = {
-            ISSUANCE: 'https://woodgroove.azure-api.net/training-issue/issue',
+            ISSUANCE: 'https://woodgroove.azure-api.net/visitor-pass-issue/issue',
             STATUS: 'https://woodgroove.azure-api.net/global-state/status'
         };
 
         const MESSAGES = {
             REQUEST_CREATED: 'Please scan the QR code with your mobile device',
             REQUEST_RETRIEVED_ISSUANCE: 'Please select next on your Microsoft Authenticator app',
-            ISSUANCE_SUCCESSFUL: 'You successfully obtained your credential, please check your mobile device',
+            ISSUANCE_SUCCESSFUL: 'You successfully obtained your visitor pass, please check your mobile device',
             PROCESSING: 'Processing your request, please wait...',
             ERROR_GENERIC: 'An error occurred. Please try again.',
             ERROR_DISPLAY_NAME: 'Please enter a display name',
@@ -462,6 +462,9 @@
                 return;
             }
 
+            // Get email
+            const email = $('#issuance-email').val().trim();
+
             // Generate state and PIN
             issuanceCurrentState = issuance_generateGUID();
             const pin = issuance_generatePIN();
@@ -474,6 +477,7 @@
             const payload = {
                 state: issuanceCurrentState,
                 displayName: displayName,
+                email: email,
                 photo: photo,
                 pin: pin.toString()
             };
