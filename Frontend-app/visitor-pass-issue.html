@@ -217,6 +217,15 @@
             border-radius: 6px;
             border: 1px solid var(--bs-gray-300);
         }
+
+        /* smaller spinner and spacing from inputs */
+        #login-validation-spinner {
+            width: 20px;
+            height: 20px;
+            border-width: 0.14rem;
+            margin-left: 12px;
+            box-sizing: content-box;
+        }
     </style>
 </head>
 
@@ -254,7 +263,8 @@
                         <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1"
                             class="login-pin-input form-control" id="pin-6" autocomplete="one-time-code">
 
-                        <div class="spinner-border hidden" style="color: #6c757d!important;" role="status" id="login-validation-spinner">
+                        <div class="spinner-border hidden" style="color: #6c757d!important;" role="status"
+                            id="login-validation-spinner">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
@@ -269,129 +279,28 @@
         </div>
     </div>
 
-    <!-- Main Section -->
-    <div id="main-section" class="section-container hidden">
-        <div class="main-card p-5">
-            <div class="contoso-header">
-                <h1><i class="fas fa-graduation-cap text-secondary me-2"></i>NovaLearn Academy</h1>
-                <p class="text-muted">Choose from our available courses</p>
-            </div>
-
-            <!-- Course List -->
-            <div id="main-course-list">
-                <h3 class="mb-4">Available Courses</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="course-card p-3" data-course="customer-data-handling">
-                            <h5 class="mb-2"><i class="fas fa-shield-alt text-primary me-2"></i>Personal Data Handling
-                            </h5>
-                            <p class="text-muted mb-0">Learn proper techniques for handling sensitive customer
-                                information</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-code text-danger me-2"></i>Web Development Fundamentals
-                            </h5>
-                            <p class="text-muted mb-0">Introduction to HTML, CSS, and JavaScript</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-chart-line text-warning me-2"></i>Business Analytics</h5>
-                            <p class="text-muted mb-0">Data analysis and visualization techniques</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-users text-success me-2"></i>Project Management</h5>
-                            <p class="text-muted mb-0">Essential project management methodologies</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-palette text-secondary me-2"></i>Digital Design</h5>
-                            <p class="text-muted mb-0">Principles of modern digital design</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-microphone text-danger me-2"></i>Public Speaking</h5>
-                            <p class="text-muted mb-0">Effective communication and presentation skills</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-calculator text-success me-2"></i>Financial Planning</h5>
-                            <p class="text-muted mb-0">Personal and business financial management</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-heart text-primary me-2"></i>Workplace Wellness</h5>
-                            <p class="text-muted mb-0">Maintaining health and balance at work</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-globe text-danger me-2"></i>International Business</h5>
-                            <p class="text-muted mb-0">Global market strategies and cultural awareness</p>
-                        </div>
-                        <div class="course-card p-3" data-course="other">
-                            <h5 class="mb-2"><i class="fas fa-lightbulb text-primary me-2"></i>Innovation & Creativity
-                            </h5>
-                            <p class="text-muted mb-0">Fostering creative thinking in business</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Personal Data Handling Course Detail -->
-            <div id="main-course-detail" class="hidden">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3><i class="fas fa-shield-alt text-primary me-2"></i>Personal Data Handling</h3>
-                    <button type="button" class="btn btn-outline-secondary" id="main-back-button">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Courses
-                    </button>
-                </div>
-
-                <div class="mb-4">
-                    <p class="lead">This comprehensive course covers essential practices for securely handling customer
-                        data in compliance with modern privacy regulations. Learn industry best practices and regulatory
-                        requirements.</p>
-                </div>
-
-                <h4 class="mb-3">Course Steps</h4>
-                <div class="main-course-step">
-                    <h6 class="mb-1">Step 1: Data Privacy Fundamentals</h6>
-                    <p class="mb-0 text-muted">Understanding the importance of data privacy and customer trust</p>
-                </div>
-                <div class="main-course-step">
-                    <h6 class="mb-1">Step 2: Regulatory Compliance</h6>
-                    <p class="mb-0 text-muted">GDPR, CCPA, and other privacy regulations</p>
-                </div>
-                <div class="main-course-step">
-                    <h6 class="mb-1">Step 3: Secure Data Handling</h6>
-                    <p class="mb-0 text-muted">Best practices for collecting, storing, and processing data</p>
-                </div>
-                <div class="main-course-step">
-                    <h6 class="mb-1">Step 4: Incident Response</h6>
-                    <p class="mb-0 text-muted">How to respond to data breaches and security incidents</p>
-                </div>
-
-                <div class="d-grid mt-4">
-                    <button type="button" id="main-receive-credit-button" class="btn btn-primary btn-lg">
-                        <i class="fas fa-certificate me-2"></i>Receive Credit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Issuance Section -->
     <div id="issuance-section" class="section-container hidden">
         <div class="issuance-card p-5">
             <div class="contoso-header">
-                <h1><i class="fas fa-certificate text-secondary me-2"></i>Receive Your Credential</h1>
-                <p class="text-muted">Complete your course certification</p>
-
-                <button type="button" class="btn btn-outline-secondary" id="main-back-button2">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Courses
-                </button>
+                <h1><i class="fas fa-solid fa-address-card text-success me-2"></i>Receive Your Visitor Pass</h1>
+                <p class="text-muted text-start">Ensure a swift entry to Contoso,
+                    please review your registration details and upload a photo as requested. The photo will be attached
+                    to the visitor pass on your mobile phone, and we want to assure you that Contoso does not store a
+                    copy of your photo. Your digital pass will be sent to your phone once these steps are completed.
+                </p>
             </div>
 
             <!-- Issuance Content Area -->
             <div id="issuance-content-container">
                 <div class="mb-3">
+                    <label for="issuance-email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="issuance-email">
+                </div>
+                <div class="mb-3">
                     <label for="issuance-display-name" class="form-label">Display Name</label>
-                    <input type="text" class="form-control" id="issuance-display-name"
-                        placeholder="Enter your display name">
+                    <input type="text" class="form-control" id="issuance-display-name" value="Alice Smith">
                 </div>
                 <div class="mb-3">
                     <label for="issuance-photo-upload" class="form-label">Photo</label>
@@ -484,7 +393,6 @@
         // Navigation functions
         function login_showSection() {
             $('#login-section').removeClass('hidden');
-            $('#main-section').addClass('hidden');
             $('#issuance-section').addClass('hidden');
 
             // Reset login form
@@ -494,22 +402,8 @@
             $('#email-next-container').removeClass('hidden');
         }
 
-        function main_showSection() {
-            $('#login-section').addClass('hidden');
-            $('#main-section').removeClass('hidden');
-            $('#issuance-section').addClass('hidden');
-
-            // Show course list, hide course detail
-            $('#main-course-list').removeClass('hidden');
-            $('#main-course-detail').addClass('hidden');
-
-            // Clear course selection
-            $('.course-card').removeClass('active');
-        }
-
         function issuance_showSection() {
             $('#login-section').addClass('hidden');
-            $('#main-section').addClass('hidden');
             $('#issuance-section').removeClass('hidden');
 
             // Reset issuance form
@@ -518,10 +412,7 @@
             // Auto-populate display name with username + random family name initial
             const username = $('#login-username').val();
             if (username) {
-                // const familyNameInitials = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-                // const randomInitial = familyNameInitials[Math.floor(Math.random() * familyNameInitials.length)];
-                // const displayName = username + ' ' + randomInitial + '.';
-                $('#issuance-display-name').val(username);
+                $('#issuance-email').val(username);
             }
         }
 
@@ -536,18 +427,6 @@
                 $('#main-course-list').addClass('hidden');
                 $('#main-course-detail').removeClass('hidden');
             }
-        });
-
-        $('#main-back-button').on('click', function () {
-            main_showSection()
-        });
-
-        $('#main-back-button2').on('click', function () {
-            main_showSection()
-        });
-
-        $('#main-receive-credit-button').on('click', function () {
-            issuance_showSection();
         });
 
         // Photo preview functionality
@@ -776,7 +655,6 @@
         }
 
         function issuance_resetForm() {
-            $('#issuance-display-name').val('');
             $('#issuance-photo-upload').val('');
             $('#issuance-photo-preview-container').empty();
             $('#issuance-error-container').hide();
@@ -859,9 +737,9 @@
                 $('.login-pin-input').prop('disabled', false);
                 $('#login-button').prop('disabled', false);
 
-                // Proceed to main section
-                main_showSection();
-            }, 3000);
+                // Proceed to issuance section
+                issuance_showSection();
+            }, 2000);
         }
 
         function login_getPinDigits() {
