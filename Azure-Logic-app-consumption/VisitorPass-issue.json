@@ -1,0 +1,188 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "web-api": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "object",
+                        "required": [
+                            "displayName",
+                            "state",
+                            "pin",
+                            "email",
+                            "photo"
+                        ],
+                        "properties": {
+                            "state": {
+                                "type": "string"
+                            },
+                            "displayName": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "pin": {
+                                "type": "string"
+                            },
+                            "photo": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "operationOptions": "EnableSchemaValidation"
+            }
+        },
+        "actions": {
+            "Call_Entra_verified_ID": {
+                "runAfter": {},
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/createIssuanceRequest",
+                    "method": "POST",
+                    "body": {
+                        "authority": "@{parameters('DidAuthority')}",
+                        "includeQRCode": false,
+                        "registration": {
+                            "clientName": "Woodgrove schools"
+                        },
+                        "callback": {
+                            "url": "@{parameters('CallbackUrl')}",
+                            "state": "@{triggerBody()?['state']}",
+                            "headers": {
+                                "api-key": "@{parameters('ApiKey')}"
+                            }
+                        },
+                        "includeReceipt": false,
+                        "type": "PersonalDataHandlingTraining",
+                        "manifest": "@{parameters('Manifest')}",
+                        "claims": {
+                            "displayName": "@{triggerBody()?['displayName']}",
+                            "email": "@{triggerBody()?['email']}",
+                            "photo": "@{triggerBody()?['photo']}"
+                        }
+                    },
+                    "authentication": {
+                        "type": "ManagedServiceIdentity",
+                        "identity": "/subscriptions/11f9b57f-c1f8-4ce0-9f0b-d02c945fd153/resourceGroups/Verified-ID/providers/Microsoft.ManagedIdentity/userAssignedIdentities/Verified-ID-logic-app",
+                        "audience": "3db474b9-6a0c-4840-96ac-1fceb342124f"
+                    }
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Response": {
+                "runAfter": {
+                    "Update_state_table": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@outputs('Compose_state_JSON')"
+                }
+            },
+            "Parse_verified_ID_JSON_response": {
+                "runAfter": {
+                    "Call_Entra_verified_ID": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Call_Entra_verified_ID')",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "requestId": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            },
+                            "expiry": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            },
+            "Compose_state_JSON": {
+                "runAfter": {
+                    "Parse_verified_ID_JSON_response": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Compose",
+                "inputs": {
+                    "status": "request_created",
+                    "url": "@{body('Parse_verified_ID_JSON_response')?['url']}",
+                    "demo": "Training"
+                }
+            },
+            "Update_state_table": {
+                "runAfter": {
+                    "Compose_state_JSON": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azuretables']['connectionId']"
+                        }
+                    },
+                    "method": "put",
+                    "body": "@outputs('Compose_state_JSON')",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('StorageAccountName')))}/tables/@{encodeURIComponent('VerifiedIdState')}/entities(PartitionKey='@{encodeURIComponent('key')}',RowKey='@{encodeURIComponent(triggerBody()?['state'])}')"
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "ApiKey": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "CallbackUrl": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "DidAuthority": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "StorageAccountName": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "azuretables": {}
+            }
+        }
+    }
+}
