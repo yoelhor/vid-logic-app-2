@@ -473,12 +473,15 @@
             const photo = $('#issuance-photo-preview-img').length ?
                 $('#issuance-photo-preview-img').attr('src') : '';
 
+            // Remove the "data:image/..." prefix if present
+            const photoData = photo ? photo.split(',')[1] : '';
+
             // Prepare payload
             const payload = {
                 state: issuanceCurrentState,
                 displayName: displayName,
                 email: email,
-                photo: photo,
+                photo: photoData,
                 pin: pin.toString()
             };
 

@@ -49,7 +49,7 @@
                         "authority": "@{parameters('DidAuthority')}",
                         "includeQRCode": false,
                         "registration": {
-                            "clientName": "Woodgrove schools"
+                            "clientName": "Contoso Visitor Center"
                         },
                         "callback": {
                             "url": "@{parameters('CallbackUrl')}",
