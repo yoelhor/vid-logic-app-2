@@ -7,7 +7,7 @@
     "url": "https://woodgroove.azure-api.net/global-callback/callback",
     "state": "1234",
     "headers": {
-      "api-key": "TvoxDWUGIdOaHLyMKFMSSKrGkfzXOYSiOIrKINPiwIWWLLTHaR"
+      "api-key": ""
     }
   },
   "type": "TermsOfService",

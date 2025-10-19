@@ -10,6 +10,6 @@
       "api-key": ""
     }
   },
-  "type": "StudentIdentityCard",
-  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/ae8066fb-65a5-5564-17d6-be7a1855d1bd/manifest"
+  "type": "WoodgroveMembershipExtended",
+  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/aaf74abe-64fb-136a-869b-c4d2a50234dc/manifest"
 }
