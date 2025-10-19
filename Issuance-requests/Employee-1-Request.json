@@ -1,11 +1,11 @@
 {
-  "authority": "did:web:verifiedid.entra.microsoft.com:e6794eec-507b-442f-b2e1-dc506b4f3da7:bd0361bc-35a5-51de-466c-813992475eee",
+  "authority": "did:web:verifiedid.entra.microsoft.com:11111111-0000-0000-0000-000000000000:22222222-0000-0000-0000-000000000000",
   "registration": {
     "clientName": "Woodgrove demo"
   },
   "callback": {
     "url": "https://woodgroove.azure-api.net/global-callback/callback",
-    "state": "",
+    "state": "1234",
     "headers": {
       "api-key": ""
     }

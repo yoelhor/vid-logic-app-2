@@ -1,0 +1,25 @@
+{
+  "authority": "did:web:verifiedid.entra.microsoft.com:11111111-0000-0000-0000-000000000000:22222222-0000-0000-0000-000000000000",
+  "registration": {
+    "clientName": "Woodgrove demo"
+  },
+  "callback": {
+    "url": "https://woodgroove.azure-api.net/global-callback/callback",
+    "state": "1234",
+    "headers": {
+      "api-key": ""
+    }
+  },
+  "includeReceipt": false,
+  "type": "VerifiedCredentialExpert",
+  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/16c599bc-dbca-eeab-3e79-fd5d50069fb4/manifest",
+  "claims": {
+    "given_name": "Yoel",
+    "family_name": "Horvitz",
+    "photo": "/9j/4AAQSkZJRgABAQEAeAB (truncated...)"
+  },
+  "pin": {
+    "value": "8272",
+    "length": 4
+  }
+}
