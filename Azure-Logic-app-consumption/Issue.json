@@ -1,0 +1,465 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "web-api": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "type": "object",
+                        "required": [
+                            "type"
+                        ],
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "given_name": {
+                                "type": "string"
+                            },
+                            "family_name": {
+                                "type": "string"
+                            },
+                            "pin": {
+                                "type": "string"
+                            },
+                            "photo": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "actions": {
+            "Response": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@outputs('Compose_response_JSON')"
+                },
+                "runAfter": {
+                    "Update_state_table": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_request_variable": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "jsonPayload",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Check_credential_type": {
+                "type": "Switch",
+                "expression": "@triggerBody()?['type']",
+                "default": {
+                    "actions": {}
+                },
+                "cases": {
+                    "Case_accessTokens": {
+                        "actions": {
+                            "Set_variable_accessTokens": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_accessTokens')"
+                                },
+                                "runAfter": {
+                                    "Compose_accessTokens": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            },
+                            "Compose_accessTokens": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "type": "VerifiedEmployee",
+                                    "manifest": "@{parameters('Manifest-accessTokens')}"
+                                }
+                            }
+                        },
+                        "case": "accessTokens"
+                    },
+                    "Case_idTokenHints": {
+                        "actions": {
+                            "Set_variable_idTokenHints": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_idTokenHints')"
+                                },
+                                "runAfter": {
+                                    "Compose_idTokenHints": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            },
+                            "Compose_idTokenHints": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "includeReceipt": false,
+                                    "type": "VerifiedCredentialExpert",
+                                    "manifest": "@{parameters('Manifest-idTokenHints')}",
+                                    "claims": {
+                                        "given_name": "@{triggerBody()?['given_name']}",
+                                        "family_name": "@{triggerBody()?['family_name']}",
+                                        "photo": "@{triggerBody()?['photo']}"
+                                    },
+                                    "pin": {
+                                        "value": "@{triggerBody()?['pin']}",
+                                        "length": 4
+                                    }
+                                }
+                            }
+                        },
+                        "case": "idTokenHints"
+                    },
+                    "Case_idTokens": {
+                        "actions": {
+                            "Compose_idTokens": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "type": "WoodgroveMembershipCredential",
+                                    "manifest": "@{parameters('Manifest-idTokens')}"
+                                }
+                            },
+                            "Set_variable_idTokens": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_idTokens')"
+                                },
+                                "runAfter": {
+                                    "Compose_idTokens": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "case": "idTokens"
+                    },
+                    "Case_presentations": {
+                        "actions": {
+                            "Compose_presentations": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "type": "StudentIdentityCard",
+                                    "manifest": "@{parameters('Manifest-presentations')}"
+                                }
+                            },
+                            "Set_variable_presentations": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_presentations')"
+                                },
+                                "runAfter": {
+                                    "Compose_presentations": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "case": "presentations"
+                    },
+                    "Case_selfIssued": {
+                        "actions": {
+                            "Compose_selfIssued": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "type": "TermsOfService",
+                                    "manifest": "@{parameters('Manifest-selfIssued')}"
+                                }
+                            },
+                            "Set_variable_selfIssued": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_selfIssued')"
+                                },
+                                "runAfter": {
+                                    "Compose_selfIssued": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "case": "selfIssued"
+                    },
+                    "Case_multiple": {
+                        "actions": {
+                            "Compose_multiple": {
+                                "type": "Compose",
+                                "inputs": {
+                                    "authority": "@{parameters('DidAuthority')}",
+                                    "registration": {
+                                        "clientName": "Woodgrove demo"
+                                    },
+                                    "callback": {
+                                        "url": "@{parameters('CallbackUrl')}",
+                                        "state": "1234",
+                                        "headers": {
+                                            "api-key": "@{parameters('ApiKey')}"
+                                        }
+                                    },
+                                    "type": "WoodgroveMembershipExtended",
+                                    "manifest": "@{parameters('Manifest-multiple')}"
+                                }
+                            },
+                            "Set_variable_multiple": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "jsonPayload",
+                                    "value": "@outputs('Compose_multiple')"
+                                },
+                                "runAfter": {
+                                    "Compose_multiple": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "case": "multiple"
+                    }
+                },
+                "runAfter": {
+                    "Initialize_request_variable": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Parse_verified_ID_JSON_response": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Call_Entra_verified_ID')",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "requestId": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            },
+                            "expiry": {
+                                "type": "integer"
+                            },
+                            "code": {
+                                "type": "string"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "innererror": {
+                                "type": "object",
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "type": "string"
+                                    },
+                                    "target": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Call_Entra_verified_ID": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Compose_state_JSON": {
+                "type": "Compose",
+                "inputs": {
+                    "status": "request_created",
+                    "url": "@{body('Parse_verified_ID_JSON_response')?['url']}",
+                    "demo": "@{triggerBody()?['type']}"
+                },
+                "runAfter": {
+                    "Parse_verified_ID_JSON_response": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Update_state_table": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azuretables']['connectionId']"
+                        }
+                    },
+                    "method": "patch",
+                    "body": "@outputs('Compose_state_JSON')",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('StorageAccountName')))}/tables/@{encodeURIComponent('VerifiedIdState')}/entities(PartitionKey='@{encodeURIComponent('key')}',RowKey='@{encodeURIComponent(body('Parse_verified_ID_JSON_response')?['requestId'])}')"
+                },
+                "runAfter": {
+                    "Compose_response_JSON": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Call_Entra_verified_ID": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/createIssuanceRequest",
+                    "method": "POST",
+                    "body": "@variables('jsonPayload')",
+                    "authentication": {
+                        "type": "ManagedServiceIdentity",
+                        "identity": "/subscriptions/11f9b57f-c1f8-4ce0-9f0b-d02c945fd153/resourceGroups/Verified-ID/providers/Microsoft.ManagedIdentity/userAssignedIdentities/Verified-ID-logic-app",
+                        "audience": "3db474b9-6a0c-4840-96ac-1fceb342124f"
+                    },
+                    "retryPolicy": {
+                        "type": "none"
+                    }
+                },
+                "runAfter": {
+                    "Check_credential_type": [
+                        "Succeeded"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Compose_response_JSON": {
+                "type": "Compose",
+                "inputs": {
+                    "status": "request_created",
+                    "key": "@{body('Parse_verified_ID_JSON_response')?['requestId']}",
+                    "url": "@{body('Parse_verified_ID_JSON_response')?['url']}",
+                    "demo": "@{triggerBody()?['type']}"
+                },
+                "runAfter": {
+                    "Compose_state_JSON": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "ApiKey": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "CallbackUrl": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "DidAuthority": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "StorageAccountName": {
+                "defaultValue": "myiddemovid",
+                "type": "String"
+            },
+            "Manifest-accessTokens": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest-idTokenHints": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest-idTokens": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest-presentations": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest-selfIssued": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "Manifest-multiple": {
+                "defaultValue": "",
+                "type": "String"
+            },
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {}
+    }
+}
