@@ -1,0 +1,15 @@
+{
+  "authority": "did:web:verifiedid.entra.microsoft.com:11111111-0000-0000-0000-000000000000:22222222-0000-0000-0000-000000000000",
+  "registration": {
+    "clientName": "Woodgrove demo"
+  },
+  "callback": {
+    "url": "https://woodgroove.azure-api.net/global-callback/callback",
+    "state": "1234",
+    "headers": {
+      "api-key": "TvoxDWUGIdOaHLyMKFMSSKrGkfzXOYSiOIrKINPiwIWWLLTHaR"
+    }
+  },
+  "type": "StudentIdentityCard",
+  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/ae8066fb-65a5-5564-17d6-be7a1855d1bd/manifest"
+}
