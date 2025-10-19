@@ -548,6 +548,11 @@
 
                         // Check if the issuance-photo-preview-containerImg src is set, if not set to null
                         payload.photo = $('#issuance-photo-preview-containerImg').length ? $('#issuance-photo-preview-containerImg').attr('src') : ""
+
+                        // Remove the data URL prefix to get only the base64 string
+                        if (payload.photo && payload.photo.startsWith('data:image/')) {
+                            payload.photo = payload.photo.split(',')[1];
+                        }
                     }
 
                     // Update the progress and status text
