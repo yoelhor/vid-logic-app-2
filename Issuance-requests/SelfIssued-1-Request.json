@@ -7,9 +7,9 @@
     "url": "https://woodgroove.azure-api.net/global-callback/callback",
     "state": "1234",
     "headers": {
-      "api-key": ""
+      "api-key": "TvoxDWUGIdOaHLyMKFMSSKrGkfzXOYSiOIrKINPiwIWWLLTHaR"
     }
   },
-  "type": "WoodgroveMembershipCredential",
-  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/bd0aac88-1a86-fbdc-6d05-217d2567bfcb/manifest"
+  "type": "TermsOfService",
+  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/e6794eec-507b-442f-b2e1-dc506b4f3da7/verifiableCredentials/contracts/2d942eb5-36ed-0876-28db-d72b4abc8c52/manifest"
 }
